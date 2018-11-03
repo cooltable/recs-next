@@ -23,17 +23,18 @@ const Brand = styled.h2`
 `;
 const NavLinks = styled.div`margin-right: 30px;`;
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-  font-size: inherit;
-  cursor: pointer;
-  &:not(:last-child) {
-    margin-right: 2rem;
-  };
-  &:hover {
+const StyledLink = styled.a`
+	text-decoration: none;
+	color: ${(props) => props.theme.colorWhite};
+	color: inherit;
+	font-size: inherit;
+	cursor: pointer;
+	&:not(:last-child) {
+		margin-right: 2rem;
+	}
+	&:hover {
 		color: ${(props) => props.theme.colorSecondary};
-	};
+	}
 `;
 
 const Header = () => (
@@ -47,9 +48,9 @@ const Header = () => (
 			<StyledLink href="/register">
 				<a>Sign Up</a>
 			</StyledLink>
-			<StyledLink href="/login">
-				<a>Sign In</a>
-			</StyledLink>
+			<Link href="/login">
+				<StyledLink>Sign In</StyledLink>
+			</Link>
 		</NavLinks>
 	</StyledNav>
 );
