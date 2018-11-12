@@ -1,0 +1,28 @@
+type User {
+  id: ID! @unique
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  friends: [User!]! @relation(name: "Friends", onDelete: SET_NULL)
+  sentRecs: [Rec!]! @relation(name: "SentRecommendations", onDelete: CASCADE)
+  recievedRecs: [Rec!]! @relation(name: "ReceivedRecommendations", onDelete: CASCADE)
+}
+
+type Rec {
+  id: ID! @unique
+  received: Boolean!
+  title: String!
+  description: String!
+  comment: String
+  response: String
+  type: String!
+  priority: Boolean!
+  rating: Int!
+  image: String!
+  sentTime: DateTime!
+  seenTime: DateTime
+  status: String! @default(value: "sent")
+  from: User! @relation(name: "SentRecommendations", onDelete: SET_NULL)
+  to: User! @relation(name: "ReceivedRecommendations", onDelete: SET_NULL)
+}
