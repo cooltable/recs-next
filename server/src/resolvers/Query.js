@@ -1,1 +1,3 @@
-export default (Query = {});
+const Query = {};
+
+export default Query;

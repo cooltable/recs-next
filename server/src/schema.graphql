@@ -1,0 +1,77 @@
+type Query {
+    users(query: String):[User!]!
+  }
+
+type Mutation {
+  createUser(data: CreateUserInput!): AuthPayload!
+  login(data: LoginUserInput): AuthPayload!
+  deleteUser(id: ID!): User!
+  updateUser(id: ID!, data: UpdateUserInput): User!
+  createRec(data: CreateRecInput!): Rec!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+  username: String
+  password: String
+}
+
+input CreateRecInput {
+  title: String!
+  description: String!
+  comment: String
+  response: String
+  priority: Boolean!
+  rating: Int!
+  image: String!
+  from: ID!
+  to: [ID!]!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  friends: [User!]!
+  sentRecs: [Rec!]!
+  recievedRecs: [Rec!]!
+  updatedAt: String!
+  createdAt: String!
+}
+
+type Rec {
+  id: ID!
+  title: String!
+  description: String!
+  comment: String
+  response: String
+  type: String!
+  priority: Boolean!
+  rating: Int!
+  image: String!
+  updatedAt: String!
+  createdAt: String!
+  status: String!
+  from: User!
+  to: User!
+}

@@ -10,8 +10,11 @@ const server = new GraphQLServer({
 		Query,
 		Mutation,
 	},
-	context: {
-		prisma,
+	context(request) {
+		return {
+			prisma,
+			request,
+		};
 	},
 });
 

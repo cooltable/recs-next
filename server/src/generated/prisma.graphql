@@ -1,0 +1,1646 @@
+# source: http://localhost:4466/recs/default
+# timestamp: Mon Nov 12 2018 20:12:57 GMT-0800 (PST)
+
+type AggregateRec {
+  count: Int!
+}
+
+type AggregateRequest {
+  count: Int!
+}
+
+type AggregateUser {
+  count: Int!
+}
+
+type BatchPayload {
+  """The number of nodes that have been affected by the Batch operation."""
+  count: Long!
+}
+
+scalar DateTime
+
+"""
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+
+type Mutation {
+  createRequest(data: RequestCreateInput!): Request!
+  createUser(data: UserCreateInput!): User!
+  createRec(data: RecCreateInput!): Rec!
+  updateRequest(data: RequestUpdateInput!, where: RequestWhereUniqueInput!): Request
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateRec(data: RecUpdateInput!, where: RecWhereUniqueInput!): Rec
+  deleteRequest(where: RequestWhereUniqueInput!): Request
+  deleteUser(where: UserWhereUniqueInput!): User
+  deleteRec(where: RecWhereUniqueInput!): Rec
+  upsertRequest(where: RequestWhereUniqueInput!, create: RequestCreateInput!, update: RequestUpdateInput!): Request!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertRec(where: RecWhereUniqueInput!, create: RecCreateInput!, update: RecUpdateInput!): Rec!
+  updateManyRequests(data: RequestUpdateManyMutationInput!, where: RequestWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyRecs(data: RecUpdateManyMutationInput!, where: RecWhereInput): BatchPayload!
+  deleteManyRequests(where: RequestWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyRecs(where: RecWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+type Query {
+  requests(where: RequestWhereInput, orderBy: RequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Request]!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  recs(where: RecWhereInput, orderBy: RecOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rec]!
+  request(where: RequestWhereUniqueInput!): Request
+  user(where: UserWhereUniqueInput!): User
+  rec(where: RecWhereUniqueInput!): Rec
+  requestsConnection(where: RequestWhereInput, orderBy: RequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RequestConnection!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  recsConnection(where: RecWhereInput, orderBy: RecOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RecConnection!
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+}
+
+type Rec implements Node {
+  id: ID!
+  title: String!
+  description: String!
+  comment: String
+  response: String
+  type: RecType!
+  priority: Boolean!
+  rating: Int!
+  image: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+  status: StatusType!
+  fromUser: User!
+  toUsers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+}
+
+"""A connection to a list of items."""
+type RecConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [RecEdge]!
+  aggregate: AggregateRec!
+}
+
+input RecCreateInput {
+  title: String!
+  description: String!
+  comment: String
+  response: String
+  type: RecType!
+  priority: Boolean!
+  rating: Int!
+  image: String!
+  status: StatusType
+  fromUser: UserCreateOneWithoutSentRecsInput!
+  toUsers: UserCreateManyWithoutRecievedRecsInput
+}
+
+input RecCreateManyInput {
+  create: [RecCreateInput!]
+  connect: [RecWhereUniqueInput!]
+}
+
+input RecCreateManyWithoutFromUserInput {
+  create: [RecCreateWithoutFromUserInput!]
+  connect: [RecWhereUniqueInput!]
+}
+
+input RecCreateManyWithoutToUsersInput {
+  create: [RecCreateWithoutToUsersInput!]
+  connect: [RecWhereUniqueInput!]
+}
+
+input RecCreateWithoutFromUserInput {
+  title: String!
+  description: String!
+  comment: String
+  response: String
+  type: RecType!
+  priority: Boolean!
+  rating: Int!
+  image: String!
+  status: StatusType
+  toUsers: UserCreateManyWithoutRecievedRecsInput
+}
+
+input RecCreateWithoutToUsersInput {
+  title: String!
+  description: String!
+  comment: String
+  response: String
+  type: RecType!
+  priority: Boolean!
+  rating: Int!
+  image: String!
+  status: StatusType
+  fromUser: UserCreateOneWithoutSentRecsInput!
+}
+
+"""An edge in a connection."""
+type RecEdge {
+  """The item at the end of the edge."""
+  node: Rec!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum RecOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  comment_ASC
+  comment_DESC
+  response_ASC
+  response_DESC
+  type_ASC
+  type_DESC
+  priority_ASC
+  priority_DESC
+  rating_ASC
+  rating_DESC
+  image_ASC
+  image_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+  status_ASC
+  status_DESC
+}
+
+type RecPreviousValues {
+  id: ID!
+  title: String!
+  description: String!
+  comment: String
+  response: String
+  type: RecType!
+  priority: Boolean!
+  rating: Int!
+  image: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+  status: StatusType!
+}
+
+type RecSubscriptionPayload {
+  mutation: MutationType!
+  node: Rec
+  updatedFields: [String!]
+  previousValues: RecPreviousValues
+}
+
+input RecSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RecSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RecSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RecSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: RecWhereInput
+}
+
+enum RecType {
+  Television_show
+  Movie
+  Book
+  Article
+  Restaurant
+}
+
+input RecUpdateDataInput {
+  title: String
+  description: String
+  comment: String
+  response: String
+  type: RecType
+  priority: Boolean
+  rating: Int
+  image: String
+  status: StatusType
+  fromUser: UserUpdateOneRequiredWithoutSentRecsInput
+  toUsers: UserUpdateManyWithoutRecievedRecsInput
+}
+
+input RecUpdateInput {
+  title: String
+  description: String
+  comment: String
+  response: String
+  type: RecType
+  priority: Boolean
+  rating: Int
+  image: String
+  status: StatusType
+  fromUser: UserUpdateOneRequiredWithoutSentRecsInput
+  toUsers: UserUpdateManyWithoutRecievedRecsInput
+}
+
+input RecUpdateManyInput {
+  create: [RecCreateInput!]
+  connect: [RecWhereUniqueInput!]
+  disconnect: [RecWhereUniqueInput!]
+  delete: [RecWhereUniqueInput!]
+  update: [RecUpdateWithWhereUniqueNestedInput!]
+  upsert: [RecUpsertWithWhereUniqueNestedInput!]
+}
+
+input RecUpdateManyMutationInput {
+  title: String
+  description: String
+  comment: String
+  response: String
+  type: RecType
+  priority: Boolean
+  rating: Int
+  image: String
+  status: StatusType
+}
+
+input RecUpdateManyWithoutFromUserInput {
+  create: [RecCreateWithoutFromUserInput!]
+  connect: [RecWhereUniqueInput!]
+  disconnect: [RecWhereUniqueInput!]
+  delete: [RecWhereUniqueInput!]
+  update: [RecUpdateWithWhereUniqueWithoutFromUserInput!]
+  upsert: [RecUpsertWithWhereUniqueWithoutFromUserInput!]
+}
+
+input RecUpdateManyWithoutToUsersInput {
+  create: [RecCreateWithoutToUsersInput!]
+  connect: [RecWhereUniqueInput!]
+  disconnect: [RecWhereUniqueInput!]
+  delete: [RecWhereUniqueInput!]
+  update: [RecUpdateWithWhereUniqueWithoutToUsersInput!]
+  upsert: [RecUpsertWithWhereUniqueWithoutToUsersInput!]
+}
+
+input RecUpdateWithoutFromUserDataInput {
+  title: String
+  description: String
+  comment: String
+  response: String
+  type: RecType
+  priority: Boolean
+  rating: Int
+  image: String
+  status: StatusType
+  toUsers: UserUpdateManyWithoutRecievedRecsInput
+}
+
+input RecUpdateWithoutToUsersDataInput {
+  title: String
+  description: String
+  comment: String
+  response: String
+  type: RecType
+  priority: Boolean
+  rating: Int
+  image: String
+  status: StatusType
+  fromUser: UserUpdateOneRequiredWithoutSentRecsInput
+}
+
+input RecUpdateWithWhereUniqueNestedInput {
+  where: RecWhereUniqueInput!
+  data: RecUpdateDataInput!
+}
+
+input RecUpdateWithWhereUniqueWithoutFromUserInput {
+  where: RecWhereUniqueInput!
+  data: RecUpdateWithoutFromUserDataInput!
+}
+
+input RecUpdateWithWhereUniqueWithoutToUsersInput {
+  where: RecWhereUniqueInput!
+  data: RecUpdateWithoutToUsersDataInput!
+}
+
+input RecUpsertWithWhereUniqueNestedInput {
+  where: RecWhereUniqueInput!
+  update: RecUpdateDataInput!
+  create: RecCreateInput!
+}
+
+input RecUpsertWithWhereUniqueWithoutFromUserInput {
+  where: RecWhereUniqueInput!
+  update: RecUpdateWithoutFromUserDataInput!
+  create: RecCreateWithoutFromUserInput!
+}
+
+input RecUpsertWithWhereUniqueWithoutToUsersInput {
+  where: RecWhereUniqueInput!
+  update: RecUpdateWithoutToUsersDataInput!
+  create: RecCreateWithoutToUsersInput!
+}
+
+input RecWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RecWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RecWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RecWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  comment: String
+
+  """All values that are not equal to given value."""
+  comment_not: String
+
+  """All values that are contained in given list."""
+  comment_in: [String!]
+
+  """All values that are not contained in given list."""
+  comment_not_in: [String!]
+
+  """All values less than the given value."""
+  comment_lt: String
+
+  """All values less than or equal the given value."""
+  comment_lte: String
+
+  """All values greater than the given value."""
+  comment_gt: String
+
+  """All values greater than or equal the given value."""
+  comment_gte: String
+
+  """All values containing the given string."""
+  comment_contains: String
+
+  """All values not containing the given string."""
+  comment_not_contains: String
+
+  """All values starting with the given string."""
+  comment_starts_with: String
+
+  """All values not starting with the given string."""
+  comment_not_starts_with: String
+
+  """All values ending with the given string."""
+  comment_ends_with: String
+
+  """All values not ending with the given string."""
+  comment_not_ends_with: String
+  response: String
+
+  """All values that are not equal to given value."""
+  response_not: String
+
+  """All values that are contained in given list."""
+  response_in: [String!]
+
+  """All values that are not contained in given list."""
+  response_not_in: [String!]
+
+  """All values less than the given value."""
+  response_lt: String
+
+  """All values less than or equal the given value."""
+  response_lte: String
+
+  """All values greater than the given value."""
+  response_gt: String
+
+  """All values greater than or equal the given value."""
+  response_gte: String
+
+  """All values containing the given string."""
+  response_contains: String
+
+  """All values not containing the given string."""
+  response_not_contains: String
+
+  """All values starting with the given string."""
+  response_starts_with: String
+
+  """All values not starting with the given string."""
+  response_not_starts_with: String
+
+  """All values ending with the given string."""
+  response_ends_with: String
+
+  """All values not ending with the given string."""
+  response_not_ends_with: String
+  type: RecType
+
+  """All values that are not equal to given value."""
+  type_not: RecType
+
+  """All values that are contained in given list."""
+  type_in: [RecType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [RecType!]
+  priority: Boolean
+
+  """All values that are not equal to given value."""
+  priority_not: Boolean
+  rating: Int
+
+  """All values that are not equal to given value."""
+  rating_not: Int
+
+  """All values that are contained in given list."""
+  rating_in: [Int!]
+
+  """All values that are not contained in given list."""
+  rating_not_in: [Int!]
+
+  """All values less than the given value."""
+  rating_lt: Int
+
+  """All values less than or equal the given value."""
+  rating_lte: Int
+
+  """All values greater than the given value."""
+  rating_gt: Int
+
+  """All values greater than or equal the given value."""
+  rating_gte: Int
+  image: String
+
+  """All values that are not equal to given value."""
+  image_not: String
+
+  """All values that are contained in given list."""
+  image_in: [String!]
+
+  """All values that are not contained in given list."""
+  image_not_in: [String!]
+
+  """All values less than the given value."""
+  image_lt: String
+
+  """All values less than or equal the given value."""
+  image_lte: String
+
+  """All values greater than the given value."""
+  image_gt: String
+
+  """All values greater than or equal the given value."""
+  image_gte: String
+
+  """All values containing the given string."""
+  image_contains: String
+
+  """All values not containing the given string."""
+  image_not_contains: String
+
+  """All values starting with the given string."""
+  image_starts_with: String
+
+  """All values not starting with the given string."""
+  image_not_starts_with: String
+
+  """All values ending with the given string."""
+  image_ends_with: String
+
+  """All values not ending with the given string."""
+  image_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  status: StatusType
+
+  """All values that are not equal to given value."""
+  status_not: StatusType
+
+  """All values that are contained in given list."""
+  status_in: [StatusType!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [StatusType!]
+  fromUser: UserWhereInput
+  toUsers_every: UserWhereInput
+  toUsers_some: UserWhereInput
+  toUsers_none: UserWhereInput
+}
+
+input RecWhereUniqueInput {
+  id: ID
+}
+
+type Request implements Node {
+  id: ID!
+  type: RecType!
+  description: String!
+  recommendations(where: RecWhereInput, orderBy: RecOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rec!]
+  updatedAt: DateTime!
+  createdAt: DateTime!
+  expires: DateTime
+  author: User!
+}
+
+"""A connection to a list of items."""
+type RequestConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [RequestEdge]!
+  aggregate: AggregateRequest!
+}
+
+input RequestCreateInput {
+  type: RecType!
+  description: String!
+  expires: DateTime
+  recommendations: RecCreateManyInput
+  author: UserCreateOneWithoutRequestsInput!
+}
+
+input RequestCreateManyWithoutAuthorInput {
+  create: [RequestCreateWithoutAuthorInput!]
+  connect: [RequestWhereUniqueInput!]
+}
+
+input RequestCreateWithoutAuthorInput {
+  type: RecType!
+  description: String!
+  expires: DateTime
+  recommendations: RecCreateManyInput
+}
+
+"""An edge in a connection."""
+type RequestEdge {
+  """The item at the end of the edge."""
+  node: Request!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum RequestOrderByInput {
+  id_ASC
+  id_DESC
+  type_ASC
+  type_DESC
+  description_ASC
+  description_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+  expires_ASC
+  expires_DESC
+}
+
+type RequestPreviousValues {
+  id: ID!
+  type: RecType!
+  description: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+  expires: DateTime
+}
+
+type RequestSubscriptionPayload {
+  mutation: MutationType!
+  node: Request
+  updatedFields: [String!]
+  previousValues: RequestPreviousValues
+}
+
+input RequestSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RequestSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RequestSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RequestSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: RequestWhereInput
+}
+
+input RequestUpdateInput {
+  type: RecType
+  description: String
+  expires: DateTime
+  recommendations: RecUpdateManyInput
+  author: UserUpdateOneRequiredWithoutRequestsInput
+}
+
+input RequestUpdateManyMutationInput {
+  type: RecType
+  description: String
+  expires: DateTime
+}
+
+input RequestUpdateManyWithoutAuthorInput {
+  create: [RequestCreateWithoutAuthorInput!]
+  connect: [RequestWhereUniqueInput!]
+  disconnect: [RequestWhereUniqueInput!]
+  delete: [RequestWhereUniqueInput!]
+  update: [RequestUpdateWithWhereUniqueWithoutAuthorInput!]
+  upsert: [RequestUpsertWithWhereUniqueWithoutAuthorInput!]
+}
+
+input RequestUpdateWithoutAuthorDataInput {
+  type: RecType
+  description: String
+  expires: DateTime
+  recommendations: RecUpdateManyInput
+}
+
+input RequestUpdateWithWhereUniqueWithoutAuthorInput {
+  where: RequestWhereUniqueInput!
+  data: RequestUpdateWithoutAuthorDataInput!
+}
+
+input RequestUpsertWithWhereUniqueWithoutAuthorInput {
+  where: RequestWhereUniqueInput!
+  update: RequestUpdateWithoutAuthorDataInput!
+  create: RequestCreateWithoutAuthorInput!
+}
+
+input RequestWhereInput {
+  """Logical AND on all given filters."""
+  AND: [RequestWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [RequestWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [RequestWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  type: RecType
+
+  """All values that are not equal to given value."""
+  type_not: RecType
+
+  """All values that are contained in given list."""
+  type_in: [RecType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [RecType!]
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  expires: DateTime
+
+  """All values that are not equal to given value."""
+  expires_not: DateTime
+
+  """All values that are contained in given list."""
+  expires_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  expires_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  expires_lt: DateTime
+
+  """All values less than or equal the given value."""
+  expires_lte: DateTime
+
+  """All values greater than the given value."""
+  expires_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  expires_gte: DateTime
+  recommendations_every: RecWhereInput
+  recommendations_some: RecWhereInput
+  recommendations_none: RecWhereInput
+  author: UserWhereInput
+}
+
+input RequestWhereUniqueInput {
+  id: ID
+}
+
+enum StatusType {
+  SENT
+  SEEN
+  DISCARDED
+  BOOKMARKED
+}
+
+type Subscription {
+  request(where: RequestSubscriptionWhereInput): RequestSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  rec(where: RecSubscriptionWhereInput): RecSubscriptionPayload
+}
+
+type User implements Node {
+  id: ID!
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  sentRecs(where: RecWhereInput, orderBy: RecOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rec!]
+  recievedRecs(where: RecWhereInput, orderBy: RecOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rec!]
+  requests(where: RequestWhereInput, orderBy: RequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Request!]
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
+}
+
+input UserCreateInput {
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  friends: UserCreateManyInput
+  sentRecs: RecCreateManyWithoutFromUserInput
+  recievedRecs: RecCreateManyWithoutToUsersInput
+  requests: RequestCreateManyWithoutAuthorInput
+}
+
+input UserCreateManyInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutRecievedRecsInput {
+  create: [UserCreateWithoutRecievedRecsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateOneWithoutRequestsInput {
+  create: UserCreateWithoutRequestsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutSentRecsInput {
+  create: UserCreateWithoutSentRecsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutRecievedRecsInput {
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  friends: UserCreateManyInput
+  sentRecs: RecCreateManyWithoutFromUserInput
+  requests: RequestCreateManyWithoutAuthorInput
+}
+
+input UserCreateWithoutRequestsInput {
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  friends: UserCreateManyInput
+  sentRecs: RecCreateManyWithoutFromUserInput
+  recievedRecs: RecCreateManyWithoutToUsersInput
+}
+
+input UserCreateWithoutSentRecsInput {
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  friends: UserCreateManyInput
+  recievedRecs: RecCreateManyWithoutToUsersInput
+  requests: RequestCreateManyWithoutAuthorInput
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge."""
+  node: User!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  email_ASC
+  email_DESC
+  username_ASC
+  username_DESC
+  password_ASC
+  password_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type UserPreviousValues {
+  id: ID!
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
+}
+
+input UserSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
+}
+
+input UserUpdateDataInput {
+  name: String
+  email: String
+  username: String
+  password: String
+  friends: UserUpdateManyInput
+  sentRecs: RecUpdateManyWithoutFromUserInput
+  recievedRecs: RecUpdateManyWithoutToUsersInput
+  requests: RequestUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateInput {
+  name: String
+  email: String
+  username: String
+  password: String
+  friends: UserUpdateManyInput
+  sentRecs: RecUpdateManyWithoutFromUserInput
+  recievedRecs: RecUpdateManyWithoutToUsersInput
+  requests: RequestUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateManyInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueNestedInput!]
+  upsert: [UserUpsertWithWhereUniqueNestedInput!]
+}
+
+input UserUpdateManyMutationInput {
+  name: String
+  email: String
+  username: String
+  password: String
+}
+
+input UserUpdateManyWithoutRecievedRecsInput {
+  create: [UserCreateWithoutRecievedRecsInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutRecievedRecsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutRecievedRecsInput!]
+}
+
+input UserUpdateOneRequiredWithoutRequestsInput {
+  create: UserCreateWithoutRequestsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutRequestsDataInput
+  upsert: UserUpsertWithoutRequestsInput
+}
+
+input UserUpdateOneRequiredWithoutSentRecsInput {
+  create: UserCreateWithoutSentRecsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutSentRecsDataInput
+  upsert: UserUpsertWithoutSentRecsInput
+}
+
+input UserUpdateWithoutRecievedRecsDataInput {
+  name: String
+  email: String
+  username: String
+  password: String
+  friends: UserUpdateManyInput
+  sentRecs: RecUpdateManyWithoutFromUserInput
+  requests: RequestUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateWithoutRequestsDataInput {
+  name: String
+  email: String
+  username: String
+  password: String
+  friends: UserUpdateManyInput
+  sentRecs: RecUpdateManyWithoutFromUserInput
+  recievedRecs: RecUpdateManyWithoutToUsersInput
+}
+
+input UserUpdateWithoutSentRecsDataInput {
+  name: String
+  email: String
+  username: String
+  password: String
+  friends: UserUpdateManyInput
+  recievedRecs: RecUpdateManyWithoutToUsersInput
+  requests: RequestUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutRecievedRecsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutRecievedRecsDataInput!
+}
+
+input UserUpsertWithoutRequestsInput {
+  update: UserUpdateWithoutRequestsDataInput!
+  create: UserCreateWithoutRequestsInput!
+}
+
+input UserUpsertWithoutSentRecsInput {
+  update: UserUpdateWithoutSentRecsDataInput!
+  create: UserCreateWithoutSentRecsInput!
+}
+
+input UserUpsertWithWhereUniqueNestedInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutRecievedRecsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutRecievedRecsDataInput!
+  create: UserCreateWithoutRecievedRecsInput!
+}
+
+input UserWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  email: String
+
+  """All values that are not equal to given value."""
+  email_not: String
+
+  """All values that are contained in given list."""
+  email_in: [String!]
+
+  """All values that are not contained in given list."""
+  email_not_in: [String!]
+
+  """All values less than the given value."""
+  email_lt: String
+
+  """All values less than or equal the given value."""
+  email_lte: String
+
+  """All values greater than the given value."""
+  email_gt: String
+
+  """All values greater than or equal the given value."""
+  email_gte: String
+
+  """All values containing the given string."""
+  email_contains: String
+
+  """All values not containing the given string."""
+  email_not_contains: String
+
+  """All values starting with the given string."""
+  email_starts_with: String
+
+  """All values not starting with the given string."""
+  email_not_starts_with: String
+
+  """All values ending with the given string."""
+  email_ends_with: String
+
+  """All values not ending with the given string."""
+  email_not_ends_with: String
+  username: String
+
+  """All values that are not equal to given value."""
+  username_not: String
+
+  """All values that are contained in given list."""
+  username_in: [String!]
+
+  """All values that are not contained in given list."""
+  username_not_in: [String!]
+
+  """All values less than the given value."""
+  username_lt: String
+
+  """All values less than or equal the given value."""
+  username_lte: String
+
+  """All values greater than the given value."""
+  username_gt: String
+
+  """All values greater than or equal the given value."""
+  username_gte: String
+
+  """All values containing the given string."""
+  username_contains: String
+
+  """All values not containing the given string."""
+  username_not_contains: String
+
+  """All values starting with the given string."""
+  username_starts_with: String
+
+  """All values not starting with the given string."""
+  username_not_starts_with: String
+
+  """All values ending with the given string."""
+  username_ends_with: String
+
+  """All values not ending with the given string."""
+  username_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  friends_every: UserWhereInput
+  friends_some: UserWhereInput
+  friends_none: UserWhereInput
+  sentRecs_every: RecWhereInput
+  sentRecs_some: RecWhereInput
+  sentRecs_none: RecWhereInput
+  recievedRecs_every: RecWhereInput
+  recievedRecs_some: RecWhereInput
+  recievedRecs_none: RecWhereInput
+  requests_every: RequestWhereInput
+  requests_some: RequestWhereInput
+  requests_none: RequestWhereInput
+}
+
+input UserWhereUniqueInput {
+  id: ID
+  email: String
+  username: String
+}
