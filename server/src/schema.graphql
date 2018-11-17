@@ -42,8 +42,8 @@ input CreateRecInput {
   priority: Boolean!
   rating: Int!
   image: String!
-  from: ID!
-  to: [ID!]!
+  fromUser: ID!
+  toUser: ID!
 }
 
 type User {

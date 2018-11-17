@@ -18,6 +18,14 @@ const server = new GraphQLServer({
 	},
 });
 
-server.start(() => {
-	console.log('The server is up!');
-});
+server.start(
+	{
+		cors: {
+			credentials: true,
+			origin: 'http://localhost:7000',
+		},
+	},
+	() => {
+		console.log('The server is up!');
+	},
+);

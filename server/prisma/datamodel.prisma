@@ -26,7 +26,7 @@ type Rec {
   createdAt: DateTime!
   status: StatusType! @default(value: "SENT")
   fromUser: User! @relation(name: "SentRecommendations", onDelete: SET_NULL)
-  toUsers: [User!]! @relation(name: "ReceivedRecommendations", onDelete: SET_NULL)
+  toUser: User! @relation(name: "ReceivedRecommendations", onDelete: SET_NULL)
 }
 
 type Request {

@@ -2,14 +2,20 @@
   "name": "create-next-example-app",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "next -p 7000",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
+    "apollo-boost": "^0.1.20",
+    "apollo-client": "^2.4.6",
     "babel-plugin-styled-components": "^1.8.0",
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.10.0",
     "next": "^7.0.2",
+    "next-with-apollo": "^3.2.2",
     "react": "^16.6.0",
+    "react-apollo": "^2.2.4",
     "react-dom": "^16.6.0",
     "styled-components": "^4.0.3"
   },

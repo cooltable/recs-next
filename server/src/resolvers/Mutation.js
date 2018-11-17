@@ -58,6 +58,30 @@ const Mutation = {
 			info,
 		);
 	},
+
+	createRec(parent, { data }, { prisma, request }, info) {
+		const userId = getUserId(request);
+
+		return prisma.mutation.createRec(
+			{
+				data: {
+					title: data.title,
+					description: data.description,
+					comment: data.comment,
+					priority: data.priority,
+					rating: data.rating,
+					image: data.image,
+					fromUser: {
+						connect: {
+							id: userId,
+						},
+					},
+					toUser: data.toUser,
+				},
+			},
+			info,
+		);
+	},
 };
 
 module.exports = Mutation;
