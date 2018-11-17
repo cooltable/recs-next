@@ -5,8 +5,8 @@ const StyledNav = styled.div`
 	display: flex;
 	align-items: center;
 	padding: 3rem 0;
-	background-color: ${(props) => props.theme.colorPrimary};
-	color: ${(props) => props.theme.colorWhite};
+	background-color: ${props => props.theme.colorPrimary};
+	color: ${props => props.theme.colorWhite};
 `;
 
 const NavBrand = styled.div`flex-grow: 1;`;
@@ -18,14 +18,14 @@ const Brand = styled.h2`
 	font-size: 40px;
 	margin-left: 40px;
 	&:hover {
-		color: ${(props) => props.theme.colorSecondary};
+		color: ${props => props.theme.colorSecondary};
 	}
 `;
 const NavLinks = styled.div`margin-right: 30px;`;
 
 const StyledLink = styled.a`
 	text-decoration: none;
-	color: ${(props) => props.theme.colorWhite};
+	color: ${props => props.theme.colorWhite};
 	color: inherit;
 	font-size: inherit;
 	cursor: pointer;
@@ -33,22 +33,22 @@ const StyledLink = styled.a`
 		margin-right: 2rem;
 	}
 	&:hover {
-		color: ${(props) => props.theme.colorSecondary};
+		color: ${props => props.theme.colorSecondary};
 	}
 `;
 
 const Header = () => (
 	<StyledNav>
 		<NavBrand>
-			<Link href="/">
+			<Link href='/'>
 				<Brand>Recs</Brand>
 			</Link>
 		</NavBrand>
 		<NavLinks>
-			<StyledLink href="/register">
-				<a>Sign Up</a>
-			</StyledLink>
-			<Link href="/login">
+			<Link href='/register'>
+				<StyledLink>Sign Up</StyledLink>
+			</Link>
+			<Link href='/login'>
 				<StyledLink>Sign In</StyledLink>
 			</Link>
 		</NavLinks>

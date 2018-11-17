@@ -10,7 +10,11 @@ const Wrapper = styled.div`
 	}
 `;
 
-const RecWrapper = styled.div`display: flex;`;
+const RecWrapper = styled.div`
+	display: flex;
+	overflow: scroll;
+	padding: 20px 0;
+`;
 const rec = {
 	title: 'Bachelor in Paradise',
 	description: 'best eva',
@@ -20,6 +24,10 @@ const RecCategory = () => (
 	<Wrapper>
 		<h3>Movies</h3>
 		<RecWrapper>
+			<RecCard rec={rec} />
+			<RecCard rec={rec} />
+			<RecCard rec={rec} />
+			<RecCard rec={rec} />
 			<RecCard rec={rec} />
 			<RecCard rec={rec} />
 			<RecCard rec={rec} />

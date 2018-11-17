@@ -6,10 +6,24 @@ const Wrapper = styled.div`
 	border: 1px solid lightgray;
 	border-radius: 5px;
 	padding: 10px;
+	position: relative;
 
 	img {
-		max-width: 200px;
+		width: 200px;
+		max-height: 250px;
+		overflow: hidden;
 	}
+`;
+
+const Circle = styled.div`
+	border-radius: 50%;
+	border: 1px solid black;
+  width: 30px;
+  background-color: white;
+  height: 30px;
+  position absolute;
+  right: -5px;
+  bottom: -5px;
 `;
 
 const RecCard = ({ rec }) => (
@@ -17,6 +31,7 @@ const RecCard = ({ rec }) => (
 		<img src='http://www.gstatic.com/tv/thumb/tvbanners/15655830/p15655830_b_v8_aa.jpg' />
 		<h3>{rec.title}</h3>
 		<p>{rec.description}</p>
+		<Circle />
 	</Wrapper>
 );
 
