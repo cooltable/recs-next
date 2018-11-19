@@ -3,7 +3,8 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
 	margin-right: 20px;
 	max-width: 220px;
-	border: 1px solid lightgray;
+	border: ${props =>
+		props.status === 'NEW' ? '1px solid' + props.theme.colorSecondary : '1px solid lightgray'};
 	border-radius: 5px;
 	padding: 10px;
 	position: relative;
@@ -12,6 +13,10 @@ const Wrapper = styled.div`
 		width: 200px;
 		max-height: 250px;
 		overflow: hidden;
+	}
+
+	&:hover {
+		width: 300px;
 	}
 `;
 
@@ -27,11 +32,10 @@ const Circle = styled.div`
 `;
 
 const RecCard = ({ rec }) => (
-	<Wrapper>
+	<Wrapper status={rec.status}>
 		<img src='http://www.gstatic.com/tv/thumb/tvbanners/15655830/p15655830_b_v8_aa.jpg' />
 		<h3>{rec.title}</h3>
 		<p>{rec.description}</p>
-		<Circle />
 	</Wrapper>
 );
 

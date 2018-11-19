@@ -18,6 +18,17 @@ const RecWrapper = styled.div`
 const rec = {
 	title: 'Bachelor in Paradise',
 	description: 'best eva',
+	status: 'NEW',
+};
+const rec3 = {
+	title: 'Bachelor in Paradise',
+	description: 'best eva',
+	status: 'SEEN',
+};
+const rec2 = {
+	title: 'Bachelor in Paradise',
+	description: 'best eva',
+	status: 'BOOKMARKED',
 };
 
 const RecCategory = () => (
@@ -26,12 +37,12 @@ const RecCategory = () => (
 		<RecWrapper>
 			<RecCard rec={rec} />
 			<RecCard rec={rec} />
-			<RecCard rec={rec} />
-			<RecCard rec={rec} />
-			<RecCard rec={rec} />
-			<RecCard rec={rec} />
-			<RecCard rec={rec} />
-			<RecCard rec={rec} />
+			<RecCard rec={rec2} />
+			<RecCard rec={rec2} />
+			<RecCard rec={rec3} />
+			<RecCard rec={rec3} />
+			<RecCard rec={rec3} />
+			<RecCard rec={rec3} />
 		</RecWrapper>
 	</Wrapper>
 );

@@ -24,7 +24,8 @@ type Rec {
   image: String!
   updatedAt: DateTime!
   createdAt: DateTime!
-  status: StatusType! @default(value: "SENT")
+  bounty: Boolean! @default(value: false)
+  status: StatusType! @default(value: NEW)
   fromUser: User! @relation(name: "SentRecommendations", onDelete: SET_NULL)
   toUser: User! @relation(name: "ReceivedRecommendations", onDelete: SET_NULL)
 }
@@ -37,7 +38,7 @@ type Request {
   updatedAt: DateTime!
   createdAt: DateTime!
   expires: DateTime
-  author: User! @relation(name: "UserRequests", onDelete: SET_NULL)
+  requester: User! @relation(name: "UserRequests", onDelete: SET_NULL)
 }
 
 enum RecType {
@@ -49,7 +50,7 @@ enum RecType {
 }
 
 enum StatusType {
-  SENT
+  NEW
   SEEN 
   DISCARDED
   BOOKMARKED

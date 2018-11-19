@@ -1,5 +1,5 @@
 # source: http://localhost:4466/recs/default
-# timestamp: Mon Nov 12 2018 20:12:57 GMT-0800 (PST)
+# timestamp: Sun Nov 18 2018 21:47:51 GMT-0800 (PST)
 
 type AggregateRec {
   count: Int!
@@ -104,9 +104,10 @@ type Rec implements Node {
   image: String!
   updatedAt: DateTime!
   createdAt: DateTime!
+  bounty: Boolean!
   status: StatusType!
   fromUser: User!
-  toUsers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  toUser: User!
 }
 
 """A connection to a list of items."""
@@ -128,9 +129,10 @@ input RecCreateInput {
   priority: Boolean!
   rating: Int!
   image: String!
+  bounty: Boolean
   status: StatusType
   fromUser: UserCreateOneWithoutSentRecsInput!
-  toUsers: UserCreateManyWithoutRecievedRecsInput
+  toUser: UserCreateOneWithoutRecievedRecsInput!
 }
 
 input RecCreateManyInput {
@@ -143,8 +145,8 @@ input RecCreateManyWithoutFromUserInput {
   connect: [RecWhereUniqueInput!]
 }
 
-input RecCreateManyWithoutToUsersInput {
-  create: [RecCreateWithoutToUsersInput!]
+input RecCreateManyWithoutToUserInput {
+  create: [RecCreateWithoutToUserInput!]
   connect: [RecWhereUniqueInput!]
 }
 
@@ -157,11 +159,12 @@ input RecCreateWithoutFromUserInput {
   priority: Boolean!
   rating: Int!
   image: String!
+  bounty: Boolean
   status: StatusType
-  toUsers: UserCreateManyWithoutRecievedRecsInput
+  toUser: UserCreateOneWithoutRecievedRecsInput!
 }
 
-input RecCreateWithoutToUsersInput {
+input RecCreateWithoutToUserInput {
   title: String!
   description: String!
   comment: String
@@ -170,6 +173,7 @@ input RecCreateWithoutToUsersInput {
   priority: Boolean!
   rating: Int!
   image: String!
+  bounty: Boolean
   status: StatusType
   fromUser: UserCreateOneWithoutSentRecsInput!
 }
@@ -206,6 +210,8 @@ enum RecOrderByInput {
   updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
+  bounty_ASC
+  bounty_DESC
   status_ASC
   status_DESC
 }
@@ -222,6 +228,7 @@ type RecPreviousValues {
   image: String!
   updatedAt: DateTime!
   createdAt: DateTime!
+  bounty: Boolean!
   status: StatusType!
 }
 
@@ -281,9 +288,10 @@ input RecUpdateDataInput {
   priority: Boolean
   rating: Int
   image: String
+  bounty: Boolean
   status: StatusType
   fromUser: UserUpdateOneRequiredWithoutSentRecsInput
-  toUsers: UserUpdateManyWithoutRecievedRecsInput
+  toUser: UserUpdateOneRequiredWithoutRecievedRecsInput
 }
 
 input RecUpdateInput {
@@ -295,9 +303,10 @@ input RecUpdateInput {
   priority: Boolean
   rating: Int
   image: String
+  bounty: Boolean
   status: StatusType
   fromUser: UserUpdateOneRequiredWithoutSentRecsInput
-  toUsers: UserUpdateManyWithoutRecievedRecsInput
+  toUser: UserUpdateOneRequiredWithoutRecievedRecsInput
 }
 
 input RecUpdateManyInput {
@@ -318,6 +327,7 @@ input RecUpdateManyMutationInput {
   priority: Boolean
   rating: Int
   image: String
+  bounty: Boolean
   status: StatusType
 }
 
@@ -330,13 +340,13 @@ input RecUpdateManyWithoutFromUserInput {
   upsert: [RecUpsertWithWhereUniqueWithoutFromUserInput!]
 }
 
-input RecUpdateManyWithoutToUsersInput {
-  create: [RecCreateWithoutToUsersInput!]
+input RecUpdateManyWithoutToUserInput {
+  create: [RecCreateWithoutToUserInput!]
   connect: [RecWhereUniqueInput!]
   disconnect: [RecWhereUniqueInput!]
   delete: [RecWhereUniqueInput!]
-  update: [RecUpdateWithWhereUniqueWithoutToUsersInput!]
-  upsert: [RecUpsertWithWhereUniqueWithoutToUsersInput!]
+  update: [RecUpdateWithWhereUniqueWithoutToUserInput!]
+  upsert: [RecUpsertWithWhereUniqueWithoutToUserInput!]
 }
 
 input RecUpdateWithoutFromUserDataInput {
@@ -348,11 +358,12 @@ input RecUpdateWithoutFromUserDataInput {
   priority: Boolean
   rating: Int
   image: String
+  bounty: Boolean
   status: StatusType
-  toUsers: UserUpdateManyWithoutRecievedRecsInput
+  toUser: UserUpdateOneRequiredWithoutRecievedRecsInput
 }
 
-input RecUpdateWithoutToUsersDataInput {
+input RecUpdateWithoutToUserDataInput {
   title: String
   description: String
   comment: String
@@ -361,6 +372,7 @@ input RecUpdateWithoutToUsersDataInput {
   priority: Boolean
   rating: Int
   image: String
+  bounty: Boolean
   status: StatusType
   fromUser: UserUpdateOneRequiredWithoutSentRecsInput
 }
@@ -375,9 +387,9 @@ input RecUpdateWithWhereUniqueWithoutFromUserInput {
   data: RecUpdateWithoutFromUserDataInput!
 }
 
-input RecUpdateWithWhereUniqueWithoutToUsersInput {
+input RecUpdateWithWhereUniqueWithoutToUserInput {
   where: RecWhereUniqueInput!
-  data: RecUpdateWithoutToUsersDataInput!
+  data: RecUpdateWithoutToUserDataInput!
 }
 
 input RecUpsertWithWhereUniqueNestedInput {
@@ -392,10 +404,10 @@ input RecUpsertWithWhereUniqueWithoutFromUserInput {
   create: RecCreateWithoutFromUserInput!
 }
 
-input RecUpsertWithWhereUniqueWithoutToUsersInput {
+input RecUpsertWithWhereUniqueWithoutToUserInput {
   where: RecWhereUniqueInput!
-  update: RecUpdateWithoutToUsersDataInput!
-  create: RecCreateWithoutToUsersInput!
+  update: RecUpdateWithoutToUserDataInput!
+  create: RecCreateWithoutToUserInput!
 }
 
 input RecWhereInput {
@@ -727,6 +739,10 @@ input RecWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
+  bounty: Boolean
+
+  """All values that are not equal to given value."""
+  bounty_not: Boolean
   status: StatusType
 
   """All values that are not equal to given value."""
@@ -738,9 +754,7 @@ input RecWhereInput {
   """All values that are not contained in given list."""
   status_not_in: [StatusType!]
   fromUser: UserWhereInput
-  toUsers_every: UserWhereInput
-  toUsers_some: UserWhereInput
-  toUsers_none: UserWhereInput
+  toUser: UserWhereInput
 }
 
 input RecWhereUniqueInput {
@@ -755,7 +769,7 @@ type Request implements Node {
   updatedAt: DateTime!
   createdAt: DateTime!
   expires: DateTime
-  author: User!
+  requester: User!
 }
 
 """A connection to a list of items."""
@@ -773,15 +787,15 @@ input RequestCreateInput {
   description: String!
   expires: DateTime
   recommendations: RecCreateManyInput
-  author: UserCreateOneWithoutRequestsInput!
+  requester: UserCreateOneWithoutRequestsInput!
 }
 
-input RequestCreateManyWithoutAuthorInput {
-  create: [RequestCreateWithoutAuthorInput!]
+input RequestCreateManyWithoutRequesterInput {
+  create: [RequestCreateWithoutRequesterInput!]
   connect: [RequestWhereUniqueInput!]
 }
 
-input RequestCreateWithoutAuthorInput {
+input RequestCreateWithoutRequesterInput {
   type: RecType!
   description: String!
   expires: DateTime
@@ -865,7 +879,7 @@ input RequestUpdateInput {
   description: String
   expires: DateTime
   recommendations: RecUpdateManyInput
-  author: UserUpdateOneRequiredWithoutRequestsInput
+  requester: UserUpdateOneRequiredWithoutRequestsInput
 }
 
 input RequestUpdateManyMutationInput {
@@ -874,31 +888,31 @@ input RequestUpdateManyMutationInput {
   expires: DateTime
 }
 
-input RequestUpdateManyWithoutAuthorInput {
-  create: [RequestCreateWithoutAuthorInput!]
+input RequestUpdateManyWithoutRequesterInput {
+  create: [RequestCreateWithoutRequesterInput!]
   connect: [RequestWhereUniqueInput!]
   disconnect: [RequestWhereUniqueInput!]
   delete: [RequestWhereUniqueInput!]
-  update: [RequestUpdateWithWhereUniqueWithoutAuthorInput!]
-  upsert: [RequestUpsertWithWhereUniqueWithoutAuthorInput!]
+  update: [RequestUpdateWithWhereUniqueWithoutRequesterInput!]
+  upsert: [RequestUpsertWithWhereUniqueWithoutRequesterInput!]
 }
 
-input RequestUpdateWithoutAuthorDataInput {
+input RequestUpdateWithoutRequesterDataInput {
   type: RecType
   description: String
   expires: DateTime
   recommendations: RecUpdateManyInput
 }
 
-input RequestUpdateWithWhereUniqueWithoutAuthorInput {
+input RequestUpdateWithWhereUniqueWithoutRequesterInput {
   where: RequestWhereUniqueInput!
-  data: RequestUpdateWithoutAuthorDataInput!
+  data: RequestUpdateWithoutRequesterDataInput!
 }
 
-input RequestUpsertWithWhereUniqueWithoutAuthorInput {
+input RequestUpsertWithWhereUniqueWithoutRequesterInput {
   where: RequestWhereUniqueInput!
-  update: RequestUpdateWithoutAuthorDataInput!
-  create: RequestCreateWithoutAuthorInput!
+  update: RequestUpdateWithoutRequesterDataInput!
+  create: RequestCreateWithoutRequesterInput!
 }
 
 input RequestWhereInput {
@@ -1069,7 +1083,7 @@ input RequestWhereInput {
   recommendations_every: RecWhereInput
   recommendations_some: RecWhereInput
   recommendations_none: RecWhereInput
-  author: UserWhereInput
+  requester: UserWhereInput
 }
 
 input RequestWhereUniqueInput {
@@ -1077,7 +1091,7 @@ input RequestWhereUniqueInput {
 }
 
 enum StatusType {
-  SENT
+  NEW
   SEEN
   DISCARDED
   BOOKMARKED
@@ -1120,8 +1134,8 @@ input UserCreateInput {
   password: String!
   friends: UserCreateManyInput
   sentRecs: RecCreateManyWithoutFromUserInput
-  recievedRecs: RecCreateManyWithoutToUsersInput
-  requests: RequestCreateManyWithoutAuthorInput
+  recievedRecs: RecCreateManyWithoutToUserInput
+  requests: RequestCreateManyWithoutRequesterInput
 }
 
 input UserCreateManyInput {
@@ -1129,9 +1143,9 @@ input UserCreateManyInput {
   connect: [UserWhereUniqueInput!]
 }
 
-input UserCreateManyWithoutRecievedRecsInput {
-  create: [UserCreateWithoutRecievedRecsInput!]
-  connect: [UserWhereUniqueInput!]
+input UserCreateOneWithoutRecievedRecsInput {
+  create: UserCreateWithoutRecievedRecsInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutRequestsInput {
@@ -1151,7 +1165,7 @@ input UserCreateWithoutRecievedRecsInput {
   password: String!
   friends: UserCreateManyInput
   sentRecs: RecCreateManyWithoutFromUserInput
-  requests: RequestCreateManyWithoutAuthorInput
+  requests: RequestCreateManyWithoutRequesterInput
 }
 
 input UserCreateWithoutRequestsInput {
@@ -1161,7 +1175,7 @@ input UserCreateWithoutRequestsInput {
   password: String!
   friends: UserCreateManyInput
   sentRecs: RecCreateManyWithoutFromUserInput
-  recievedRecs: RecCreateManyWithoutToUsersInput
+  recievedRecs: RecCreateManyWithoutToUserInput
 }
 
 input UserCreateWithoutSentRecsInput {
@@ -1170,8 +1184,8 @@ input UserCreateWithoutSentRecsInput {
   username: String!
   password: String!
   friends: UserCreateManyInput
-  recievedRecs: RecCreateManyWithoutToUsersInput
-  requests: RequestCreateManyWithoutAuthorInput
+  recievedRecs: RecCreateManyWithoutToUserInput
+  requests: RequestCreateManyWithoutRequesterInput
 }
 
 """An edge in a connection."""
@@ -1256,8 +1270,8 @@ input UserUpdateDataInput {
   password: String
   friends: UserUpdateManyInput
   sentRecs: RecUpdateManyWithoutFromUserInput
-  recievedRecs: RecUpdateManyWithoutToUsersInput
-  requests: RequestUpdateManyWithoutAuthorInput
+  recievedRecs: RecUpdateManyWithoutToUserInput
+  requests: RequestUpdateManyWithoutRequesterInput
 }
 
 input UserUpdateInput {
@@ -1267,8 +1281,8 @@ input UserUpdateInput {
   password: String
   friends: UserUpdateManyInput
   sentRecs: RecUpdateManyWithoutFromUserInput
-  recievedRecs: RecUpdateManyWithoutToUsersInput
-  requests: RequestUpdateManyWithoutAuthorInput
+  recievedRecs: RecUpdateManyWithoutToUserInput
+  requests: RequestUpdateManyWithoutRequesterInput
 }
 
 input UserUpdateManyInput {
@@ -1287,13 +1301,11 @@ input UserUpdateManyMutationInput {
   password: String
 }
 
-input UserUpdateManyWithoutRecievedRecsInput {
-  create: [UserCreateWithoutRecievedRecsInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutRecievedRecsInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutRecievedRecsInput!]
+input UserUpdateOneRequiredWithoutRecievedRecsInput {
+  create: UserCreateWithoutRecievedRecsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutRecievedRecsDataInput
+  upsert: UserUpsertWithoutRecievedRecsInput
 }
 
 input UserUpdateOneRequiredWithoutRequestsInput {
@@ -1317,7 +1329,7 @@ input UserUpdateWithoutRecievedRecsDataInput {
   password: String
   friends: UserUpdateManyInput
   sentRecs: RecUpdateManyWithoutFromUserInput
-  requests: RequestUpdateManyWithoutAuthorInput
+  requests: RequestUpdateManyWithoutRequesterInput
 }
 
 input UserUpdateWithoutRequestsDataInput {
@@ -1327,7 +1339,7 @@ input UserUpdateWithoutRequestsDataInput {
   password: String
   friends: UserUpdateManyInput
   sentRecs: RecUpdateManyWithoutFromUserInput
-  recievedRecs: RecUpdateManyWithoutToUsersInput
+  recievedRecs: RecUpdateManyWithoutToUserInput
 }
 
 input UserUpdateWithoutSentRecsDataInput {
@@ -1336,8 +1348,8 @@ input UserUpdateWithoutSentRecsDataInput {
   username: String
   password: String
   friends: UserUpdateManyInput
-  recievedRecs: RecUpdateManyWithoutToUsersInput
-  requests: RequestUpdateManyWithoutAuthorInput
+  recievedRecs: RecUpdateManyWithoutToUserInput
+  requests: RequestUpdateManyWithoutRequesterInput
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
@@ -1345,9 +1357,9 @@ input UserUpdateWithWhereUniqueNestedInput {
   data: UserUpdateDataInput!
 }
 
-input UserUpdateWithWhereUniqueWithoutRecievedRecsInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutRecievedRecsDataInput!
+input UserUpsertWithoutRecievedRecsInput {
+  update: UserUpdateWithoutRecievedRecsDataInput!
+  create: UserCreateWithoutRecievedRecsInput!
 }
 
 input UserUpsertWithoutRequestsInput {
@@ -1364,12 +1376,6 @@ input UserUpsertWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput!
   update: UserUpdateDataInput!
   create: UserCreateInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutRecievedRecsInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutRecievedRecsDataInput!
-  create: UserCreateWithoutRecievedRecsInput!
 }
 
 input UserWhereInput {

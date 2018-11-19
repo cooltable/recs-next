@@ -1,5 +1,6 @@
 type Query {
     users(query: String):[User!]!
+    myRecs(query: String): [Rec!]!
   }
 
 type Mutation {
@@ -72,6 +73,6 @@ type Rec {
   updatedAt: String!
   createdAt: String!
   status: String!
-  from: User!
-  to: User!
+  fromUser: User!
+  toUser: User!
 }
