@@ -3,8 +3,7 @@ import RecCard from './RecCard';
 
 const Wrapper = styled.div`
 	margin: 40px;
-
-	h3 {
+  
 		text-align: left;
 		text-transform: uppercase;
 	}
