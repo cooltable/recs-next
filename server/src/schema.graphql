@@ -41,9 +41,9 @@ input CreateRecInput {
   comment: String
   response: String
   priority: Boolean!
+  type: RecType!
   rating: Int!
   image: String!
-  fromUser: ID!
   toUser: ID!
 }
 
@@ -75,4 +75,19 @@ type Rec {
   status: String!
   fromUser: User!
   toUser: User!
+}
+
+enum RecType {
+  Television_show
+  Movie
+  Book
+  Article
+  Restaurant
+}
+
+enum StatusType {
+  NEW
+  SEEN 
+  DISCARDED
+  BOOKMARKED
 }

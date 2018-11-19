@@ -71,12 +71,17 @@ const Mutation = {
 					priority: data.priority,
 					rating: data.rating,
 					image: data.image,
+					type: data.type,
 					fromUser: {
 						connect: {
 							id: userId,
 						},
 					},
-					toUser: data.toUser,
+					toUser: {
+						connect: {
+							id: data.toUser,
+						},
+					},
 				},
 			},
 			info,
