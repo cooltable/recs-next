@@ -9,7 +9,7 @@ const FormWrapper = styled.div`
 		margin: 30px 0;
 		text-transform: uppercase;
 		letter-spacing: 5px;
-		color: ${(props) => props.theme.colorPrimary};
+		color: ${props => props.theme.colorPrimary};
 		font-weight: normal;
 	}
 `;
@@ -21,7 +21,7 @@ const InputWrapper = styled.div`
 		position: absolute;
 		top: 10px;
 		left: 10px;
-		color: ${(props) => props.theme.colorPrimary};
+		color: ${props => props.theme.colorPrimary};
 		transform-origin: left;
 		transition: all 0.4s;
 		visibility: hidden;
@@ -36,13 +36,13 @@ const Border = styled.span`
 		left: 0;
 		width: 100%;
 		height: 2px;
-		background-color: darken(${(props) => props.theme.colorWhite}, 20%);
+		background-color: darken(${props => props.theme.colorWhite}, 20%);
 		border-radius: 30px;
 	}
 
 	&::after {
 		content: '';
-		background-color: ${(props) => props.theme.colorSecondary};
+		background-color: ${props => props.theme.colorSecondary};
 		transform: scaleX(0);
 		transition: all 0.4s;
 	}
@@ -54,7 +54,7 @@ const Border = styled.span`
 		left: -25px;
 		/* width: 5px;
     height: 5px; */
-		color: ${(props) => props.theme.colorSecondary};
+		color: ${props => props.theme.colorSecondary};
 		border-radius: 50%;
 		font-size: 20px;
 		/* background-color: $color-primary; */
@@ -74,7 +74,7 @@ const StyledInput = styled.input`
 	border: none;
 
 	&::placeholder {
-		color: darken(${(props) => props.theme.colorWhite}, 25%);
+		color: darken(${props => props.theme.colorWhite}, 25%);
 	}
 
 	&:not(:last-child) {
@@ -109,8 +109,41 @@ export const AuthForm = ({ title, handleSubmit, children }) => (
 
 export const AuthInput = ({ name, type, handleChange, value, label }) => (
 	<InputWrapper>
-		<StyledInput name={name} type={type} onChange={handleChange} value={value} placeholder={label} />
+		<StyledInput
+			name={name}
+			type={type}
+			onChange={handleChange}
+			value={value}
+			placeholder={label}
+		/>
 		<label>{label}</label>
 		<Border />
 	</InputWrapper>
 );
+
+const ButtonWrapper = styled.button`
+	border-radius: 3px;
+	border: 1px solid ${props => props.theme.colorSecondary};
+	padding: 5px 10px;
+	margin: 5px 0;
+	width: 100%;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	color: ${props => props.theme.colorSecondary};
+	cursor: pointer;
+	font-size: 14px;
+	font-family: inherit;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: transparent;
+
+	&:hover,
+	&:focus {
+		background-color: ${props => props.theme.colorSecondary};
+		color: white;
+		outline: none;
+	}
+`;
+
+export const AuthButton = () => <ButtonWrapper>Submit</ButtonWrapper>;

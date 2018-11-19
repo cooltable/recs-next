@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import styled from 'styled-components';
+import User from './User';
 
 const StyledNav = styled.div`
 	display: flex;

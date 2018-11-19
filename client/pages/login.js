@@ -1,6 +1,7 @@
-import { AuthForm, AuthInput } from '../components/AuthForm';
+import { AuthForm, AuthInput, AuthButton } from '../components/AuthForm';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import { CURRENT_USER_QUERY } from '../components/User';
 
 const LOGIN_MUTATION = gql`
 	mutation LOGIN_MUTATION($email: String!, $password: String!) {
@@ -10,38 +11,53 @@ const LOGIN_MUTATION = gql`
 				id
 				email
 				name
+				username
 			}
 		}
 	}
 `;
 
 class Login extends React.Component {
-	state = { username: '', password: '' };
+	state = { email: '', password: '' };
 
-	handleChange = (e, a) => {
-		e.preventDefault();
-		console.log(e, a);
+	handleChange = e => {
+		this.setState({ [e.target.name]: e.target.value });
 	};
 
 	render() {
 		let { username, password } = this.state;
 		return (
-			<AuthForm title='Log In' handleSubmit={() => console.log('hi')}>
-				<AuthInput
-					name='username'
-					type='text'
-					label='Username'
-					value={username}
-					handleChange={this.handleChange}
-				/>
-				<AuthInput
-					name='password'
-					type='password'
-					label='Password'
-					value={password}
-					handleChange={this.handleChange}
-				/>
-			</AuthForm>
+			<Mutation
+				mutation={LOGIN_MUTATION}
+				variables={this.state}
+				refetchQueries={[ { query: CURRENT_USER_QUERY } ]}
+			>
+				{login => (
+					<AuthForm
+						title='Log In'
+						handleSubmit={async e => {
+							e.preventDefault();
+							await login();
+						}}
+					>
+						<AuthInput
+							name='username'
+							type='text'
+							label='Username'
+							value={username}
+							handleChange={this.handleChange}
+						/>
+						<AuthInput
+							name='password'
+							type='password'
+							label='Password'
+							value={password}
+							handleChange={this.handleChange}
+						/>
+						<AuthButton />
+					</AuthForm>
+				)}
+			</Mutation>
 		);
 	}
 }

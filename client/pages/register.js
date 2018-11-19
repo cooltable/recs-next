@@ -1,7 +1,14 @@
-import { AuthForm, AuthInput } from '../components/AuthForm';
+import { AuthForm, AuthInput, AuthButton } from '../components/AuthForm';
 
 class Register extends React.Component {
-	state = { username: '', password: '', passwordCheck: '', firstName: '', lastName: '', email: '' };
+	state = {
+		username: '',
+		password: '',
+		passwordCheck: '',
+		firstName: '',
+		lastName: '',
+		email: '',
+	};
 
 	handleChange = (e, a) => {
 		e.preventDefault();
@@ -10,37 +17,50 @@ class Register extends React.Component {
 	render() {
 		let { username, password, passwordCheck, firstName, lastName, email } = this.state;
 		return (
-			<AuthForm title="Sign Up" handleSubmit={() => console.log('hi')}>
+			<AuthForm title='Sign Up' handleSubmit={() => console.log('hi')}>
 				<AuthInput
-					name="firstName"
-					type="text"
-					label="First"
+					name='firstName'
+					type='text'
+					label='First'
 					value={firstName}
 					handleChange={this.handleChange}
 				/>
-				<AuthInput name="lastName" type="text" label="Last" value={lastName} handleChange={this.handleChange} />
-				<AuthInput name="email" type="email" label="Email" value={email} handleChange={this.handleChange} />
 				<AuthInput
-					name="username"
-					type="text"
-					label="Username"
+					name='lastName'
+					type='text'
+					label='Last'
+					value={lastName}
+					handleChange={this.handleChange}
+				/>
+				<AuthInput
+					name='email'
+					type='email'
+					label='Email'
+					value={email}
+					handleChange={this.handleChange}
+				/>
+				<AuthInput
+					name='username'
+					type='text'
+					label='Username'
 					value={username}
 					handleChange={this.handleChange}
 				/>
 				<AuthInput
-					name="password"
-					type="password"
-					label="Password"
+					name='password'
+					type='password'
+					label='Password'
 					value={password}
 					handleChange={this.handleChange}
 				/>
 				<AuthInput
-					name="passwordCheck"
-					type="password"
-					label="Re-enter Password"
+					name='passwordCheck'
+					type='password'
+					label='Re-enter Password'
 					value={passwordCheck}
 					handleChange={this.handleChange}
 				/>
+				<AuthButton />
 			</AuthForm>
 		);
 	}

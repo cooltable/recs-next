@@ -1,6 +1,7 @@
 type Query {
     users(query: String):[User!]!
     myRecs(query: String): [Rec!]!
+    me: User!
   }
 
 type Mutation {

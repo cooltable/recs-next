@@ -1,6 +1,15 @@
 import getUserId from '../utils/getUserId';
 
 const Query = {
+	me(parent, args, { prisma, request }, info) {
+		const userId = getUserId(request);
+
+		return prisma.query.user({
+			where: {
+				id: userId,
+			},
+		});
+	},
 	users(parent, args, { prisma }, info) {
 		const opArgs = {
 			first: args.first,
