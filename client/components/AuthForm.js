@@ -144,6 +144,16 @@ const ButtonWrapper = styled.button`
 		color: white;
 		outline: none;
 	}
+
+	.material-icons {
+		margin-right: 5px;
+		font-size: 18px;
+	}
 `;
 
-export const AuthButton = () => <ButtonWrapper>Submit</ButtonWrapper>;
+export const AuthButton = () => (
+	<ButtonWrapper>
+		<i class='material-icons'>send</i>
+		<span>Submit</span>
+	</ButtonWrapper>
+);
