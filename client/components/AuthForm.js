@@ -9,7 +9,7 @@ const FormWrapper = styled.div`
     margin: 30px 0;
     text-transform: uppercase;
     letter-spacing: 5px;
-    color: ${props => props.theme.colorPrimary};
+    color: ${props => props.theme.colorPrimaryDark};
     font-weight: normal;
   }
 `;

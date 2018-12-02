@@ -7,6 +7,7 @@ const StyledNav = styled.div`
   display: flex;
   align-items: center;
   padding: 3rem 0;
+  color: ${props => props.theme.colorPrimaryDark};
 `;
 
 const NavBrand = styled.div`
@@ -56,6 +57,9 @@ const Header = () => (
         </Link>
         <Link href="/login">
           <StyledLink>Sign In</StyledLink>
+        </Link>
+        <Link href="/recs">
+          <StyledLink>Recs</StyledLink>
         </Link>
       </NavLinks>
     </StyledNav>
