@@ -59,6 +59,44 @@ const Mutation = {
 		);
 	},
 
+	async createFriendRequest(parent, args, { prisma, request }, info) {
+		const userId = getUserId(request);
+		const friend = await prisma.query.user({
+			where: {
+				username: args.data.to,
+			},
+		});
+
+		const friendExists = await prisma.exists.User({
+			id: userId,
+			friends_some: {
+				id: friend.id,
+			},
+		});
+
+		const requestExists = await prisma.exists.FriendRequest({
+			to: { id: friend.id },
+			from: { id: userId },
+		});
+
+		if (friendExists || requestExists) throw new Error('Unable to add friend');
+
+		return prisma.mutation.createFriendRequest({
+			data: {
+				to: {
+					connect: {
+						id: friend.id,
+					},
+				},
+				from: {
+					connect: {
+						id: userId,
+					},
+				},
+			},
+		});
+	},
+
 	async createRec(parent, { data }, { prisma, request }, info) {
 		const userId = getUserId(request);
 
