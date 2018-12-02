@@ -121,7 +121,7 @@ const Mutation = {
 		});
 
 		if (args.status === 'ACCEPTED') {
-			const friend = prisma.mutation.updateUser({
+			const friend = await prisma.mutation.updateUser({
 				where: {
 					id: userId,
 				},
@@ -129,7 +129,7 @@ const Mutation = {
 					friends: {
 						connect: [
 							{
-								id: newFriend,
+								id: newFriend.id,
 							},
 						],
 					},
