@@ -1,18 +1,18 @@
-import React, { Component, Fragment } from 'react';
-import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
+import React, { Component, Fragment } from "react";
+import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 
-import Header from './Header';
-import Meta from './Meta';
+import Header from "./Header";
+import Meta from "./Meta";
 
-const theme = {
-	colorPrimary: '#455a64',
-	colorPrimaryLight: '#718792',
-	colorPrimaryDark: '#1c313a',
-	colorSecondary: '#ffab00',
-	colorSecondaryLight: '#ffdd4b',
-	colorSecondaryDark: '#c67c00',
-	colorWhite: '#fff',
-	colorBlack: '#000',
+export const theme = {
+  colorPrimary: "#455a64",
+  colorPrimaryLight: "#718792",
+  colorPrimaryDark: "#1c313a",
+  colorSecondary: "#ffab00",
+  colorSecondaryLight: "#ffdd4b",
+  colorSecondaryDark: "#c67c00",
+  colorWhite: "#fff",
+  colorBlack: "#000",
 };
 
 const GlobalStyle = createGlobalStyle`
@@ -43,18 +43,17 @@ h5 {
 `;
 
 class Page extends Component {
-	render() {
-		return (
-			<ThemeProvider theme={theme}>
-				<div>
-					<Meta />
-					<Header />
-					<GlobalStyle />
-					<div>{this.props.children}</div>
-				</div>
-			</ThemeProvider>
-		);
-	}
+  render() {
+    return (
+      <ThemeProvider theme={theme}>
+        <div>
+          <Meta />
+          <GlobalStyle />
+          <div>{this.props.children}</div>
+        </div>
+      </ThemeProvider>
+    );
+  }
 }
 
 export default Page;
