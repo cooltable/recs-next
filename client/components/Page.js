@@ -1,18 +1,33 @@
-import React, { Component, Fragment } from "react";
-import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
+import React, { Component } from "react";
+import { ThemeProvider, createGlobalStyle } from "styled-components";
+import Color from "color";
 
-import Header from "./Header";
 import Meta from "./Meta";
 
 export const theme = {
-  colorPrimary: "#455a64",
-  colorPrimaryLight: "#718792",
-  colorPrimaryDark: "#1c313a",
+  colorPrimary: "#00ffae",
+  colorPrimaryLight: Color("#00ffae")
+    .lighten(0.2)
+    .hsl()
+    .string(),
+  colorPrimaryDark: Color("#00ffae")
+    .darken(0.2)
+    .hsl()
+    .string(),
   colorSecondary: "#ffab00",
   colorSecondaryLight: "#ffdd4b",
   colorSecondaryDark: "#c67c00",
-  colorWhite: "#fff",
-  colorBlack: "#000",
+  colorTertiary: "#ff00aa",
+  colorTertiaryLight: Color("#ff00aa")
+    .lighten(0.2)
+    .hsl()
+    .string(),
+  colorTertiary: Color("#ff00aa")
+    .darken(0.2)
+    .hsl()
+    .string(),
+  colorWhite: "#eee",
+  colorBlack: "#222",
 };
 
 const GlobalStyle = createGlobalStyle`

@@ -33,10 +33,12 @@ class MyApp extends App {
         <style jsx global>{`
           .page-transition-enter {
             opacity: 0;
+            transform: translateX(-100px);
           }
           .page-transition-enter-active {
             opacity: 1;
-            transition: opacity 300ms;
+            transition: all 300ms;
+            transform: translateX(0);
           }
           .page-transition-exit {
             opacity: 1;
