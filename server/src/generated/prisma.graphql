@@ -1,5 +1,13 @@
 # source: http://localhost:4466/recs/default
-# timestamp: Sun Nov 18 2018 21:47:51 GMT-0800 (PST)
+# timestamp: Sat Dec 01 2018 21:06:58 GMT-0800 (PST)
+
+type AggregateComment {
+  count: Int!
+}
+
+type AggregateFriendRequest {
+  count: Int!
+}
 
 type AggregateRec {
   count: Int!
@@ -18,7 +26,601 @@ type BatchPayload {
   count: Long!
 }
 
+type Comment implements Node {
+  id: ID!
+  text: String!
+  author: User!
+  rec: Rec!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+"""A connection to a list of items."""
+type CommentConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CommentEdge]!
+  aggregate: AggregateComment!
+}
+
+input CommentCreateInput {
+  text: String!
+  author: UserCreateOneWithoutCommentsInput!
+  rec: RecCreateOneWithoutCommentsInput!
+}
+
+input CommentCreateManyWithoutAuthorInput {
+  create: [CommentCreateWithoutAuthorInput!]
+  connect: [CommentWhereUniqueInput!]
+}
+
+input CommentCreateManyWithoutRecInput {
+  create: [CommentCreateWithoutRecInput!]
+  connect: [CommentWhereUniqueInput!]
+}
+
+input CommentCreateWithoutAuthorInput {
+  text: String!
+  rec: RecCreateOneWithoutCommentsInput!
+}
+
+input CommentCreateWithoutRecInput {
+  text: String!
+  author: UserCreateOneWithoutCommentsInput!
+}
+
+"""An edge in a connection."""
+type CommentEdge {
+  """The item at the end of the edge."""
+  node: Comment!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum CommentOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type CommentPreviousValues {
+  id: ID!
+  text: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+type CommentSubscriptionPayload {
+  mutation: MutationType!
+  node: Comment
+  updatedFields: [String!]
+  previousValues: CommentPreviousValues
+}
+
+input CommentSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CommentSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CommentSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CommentSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: CommentWhereInput
+}
+
+input CommentUpdateInput {
+  text: String
+  author: UserUpdateOneRequiredWithoutCommentsInput
+  rec: RecUpdateOneRequiredWithoutCommentsInput
+}
+
+input CommentUpdateManyMutationInput {
+  text: String
+}
+
+input CommentUpdateManyWithoutAuthorInput {
+  create: [CommentCreateWithoutAuthorInput!]
+  connect: [CommentWhereUniqueInput!]
+  disconnect: [CommentWhereUniqueInput!]
+  delete: [CommentWhereUniqueInput!]
+  update: [CommentUpdateWithWhereUniqueWithoutAuthorInput!]
+  upsert: [CommentUpsertWithWhereUniqueWithoutAuthorInput!]
+}
+
+input CommentUpdateManyWithoutRecInput {
+  create: [CommentCreateWithoutRecInput!]
+  connect: [CommentWhereUniqueInput!]
+  disconnect: [CommentWhereUniqueInput!]
+  delete: [CommentWhereUniqueInput!]
+  update: [CommentUpdateWithWhereUniqueWithoutRecInput!]
+  upsert: [CommentUpsertWithWhereUniqueWithoutRecInput!]
+}
+
+input CommentUpdateWithoutAuthorDataInput {
+  text: String
+  rec: RecUpdateOneRequiredWithoutCommentsInput
+}
+
+input CommentUpdateWithoutRecDataInput {
+  text: String
+  author: UserUpdateOneRequiredWithoutCommentsInput
+}
+
+input CommentUpdateWithWhereUniqueWithoutAuthorInput {
+  where: CommentWhereUniqueInput!
+  data: CommentUpdateWithoutAuthorDataInput!
+}
+
+input CommentUpdateWithWhereUniqueWithoutRecInput {
+  where: CommentWhereUniqueInput!
+  data: CommentUpdateWithoutRecDataInput!
+}
+
+input CommentUpsertWithWhereUniqueWithoutAuthorInput {
+  where: CommentWhereUniqueInput!
+  update: CommentUpdateWithoutAuthorDataInput!
+  create: CommentCreateWithoutAuthorInput!
+}
+
+input CommentUpsertWithWhereUniqueWithoutRecInput {
+  where: CommentWhereUniqueInput!
+  update: CommentUpdateWithoutRecDataInput!
+  create: CommentCreateWithoutRecInput!
+}
+
+input CommentWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CommentWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CommentWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CommentWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  author: UserWhereInput
+  rec: RecWhereInput
+}
+
+input CommentWhereUniqueInput {
+  id: ID
+}
+
 scalar DateTime
+
+type FriendRequest implements Node {
+  id: ID!
+  to: User!
+  from: User!
+  status: ReqStatusType!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+"""A connection to a list of items."""
+type FriendRequestConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [FriendRequestEdge]!
+  aggregate: AggregateFriendRequest!
+}
+
+input FriendRequestCreateInput {
+  status: ReqStatusType
+  to: UserCreateOneWithoutReceivedFriendRequestsInput!
+  from: UserCreateOneWithoutSentFriendRequestsInput!
+}
+
+input FriendRequestCreateManyWithoutFromInput {
+  create: [FriendRequestCreateWithoutFromInput!]
+  connect: [FriendRequestWhereUniqueInput!]
+}
+
+input FriendRequestCreateManyWithoutToInput {
+  create: [FriendRequestCreateWithoutToInput!]
+  connect: [FriendRequestWhereUniqueInput!]
+}
+
+input FriendRequestCreateWithoutFromInput {
+  status: ReqStatusType
+  to: UserCreateOneWithoutReceivedFriendRequestsInput!
+}
+
+input FriendRequestCreateWithoutToInput {
+  status: ReqStatusType
+  from: UserCreateOneWithoutSentFriendRequestsInput!
+}
+
+"""An edge in a connection."""
+type FriendRequestEdge {
+  """The item at the end of the edge."""
+  node: FriendRequest!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum FriendRequestOrderByInput {
+  id_ASC
+  id_DESC
+  status_ASC
+  status_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type FriendRequestPreviousValues {
+  id: ID!
+  status: ReqStatusType!
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+type FriendRequestSubscriptionPayload {
+  mutation: MutationType!
+  node: FriendRequest
+  updatedFields: [String!]
+  previousValues: FriendRequestPreviousValues
+}
+
+input FriendRequestSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [FriendRequestSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FriendRequestSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FriendRequestSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: FriendRequestWhereInput
+}
+
+input FriendRequestUpdateInput {
+  status: ReqStatusType
+  to: UserUpdateOneRequiredWithoutReceivedFriendRequestsInput
+  from: UserUpdateOneRequiredWithoutSentFriendRequestsInput
+}
+
+input FriendRequestUpdateManyMutationInput {
+  status: ReqStatusType
+}
+
+input FriendRequestUpdateManyWithoutFromInput {
+  create: [FriendRequestCreateWithoutFromInput!]
+  connect: [FriendRequestWhereUniqueInput!]
+  disconnect: [FriendRequestWhereUniqueInput!]
+  delete: [FriendRequestWhereUniqueInput!]
+  update: [FriendRequestUpdateWithWhereUniqueWithoutFromInput!]
+  upsert: [FriendRequestUpsertWithWhereUniqueWithoutFromInput!]
+}
+
+input FriendRequestUpdateManyWithoutToInput {
+  create: [FriendRequestCreateWithoutToInput!]
+  connect: [FriendRequestWhereUniqueInput!]
+  disconnect: [FriendRequestWhereUniqueInput!]
+  delete: [FriendRequestWhereUniqueInput!]
+  update: [FriendRequestUpdateWithWhereUniqueWithoutToInput!]
+  upsert: [FriendRequestUpsertWithWhereUniqueWithoutToInput!]
+}
+
+input FriendRequestUpdateWithoutFromDataInput {
+  status: ReqStatusType
+  to: UserUpdateOneRequiredWithoutReceivedFriendRequestsInput
+}
+
+input FriendRequestUpdateWithoutToDataInput {
+  status: ReqStatusType
+  from: UserUpdateOneRequiredWithoutSentFriendRequestsInput
+}
+
+input FriendRequestUpdateWithWhereUniqueWithoutFromInput {
+  where: FriendRequestWhereUniqueInput!
+  data: FriendRequestUpdateWithoutFromDataInput!
+}
+
+input FriendRequestUpdateWithWhereUniqueWithoutToInput {
+  where: FriendRequestWhereUniqueInput!
+  data: FriendRequestUpdateWithoutToDataInput!
+}
+
+input FriendRequestUpsertWithWhereUniqueWithoutFromInput {
+  where: FriendRequestWhereUniqueInput!
+  update: FriendRequestUpdateWithoutFromDataInput!
+  create: FriendRequestCreateWithoutFromInput!
+}
+
+input FriendRequestUpsertWithWhereUniqueWithoutToInput {
+  where: FriendRequestWhereUniqueInput!
+  update: FriendRequestUpdateWithoutToDataInput!
+  create: FriendRequestCreateWithoutToInput!
+}
+
+input FriendRequestWhereInput {
+  """Logical AND on all given filters."""
+  AND: [FriendRequestWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FriendRequestWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FriendRequestWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  status: ReqStatusType
+
+  """All values that are not equal to given value."""
+  status_not: ReqStatusType
+
+  """All values that are contained in given list."""
+  status_in: [ReqStatusType!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [ReqStatusType!]
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  to: UserWhereInput
+  from: UserWhereInput
+}
+
+input FriendRequestWhereUniqueInput {
+  id: ID
+}
 
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
@@ -28,21 +630,33 @@ scalar Long
 
 type Mutation {
   createRequest(data: RequestCreateInput!): Request!
+  createComment(data: CommentCreateInput!): Comment!
+  createFriendRequest(data: FriendRequestCreateInput!): FriendRequest!
   createUser(data: UserCreateInput!): User!
   createRec(data: RecCreateInput!): Rec!
   updateRequest(data: RequestUpdateInput!, where: RequestWhereUniqueInput!): Request
+  updateComment(data: CommentUpdateInput!, where: CommentWhereUniqueInput!): Comment
+  updateFriendRequest(data: FriendRequestUpdateInput!, where: FriendRequestWhereUniqueInput!): FriendRequest
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateRec(data: RecUpdateInput!, where: RecWhereUniqueInput!): Rec
   deleteRequest(where: RequestWhereUniqueInput!): Request
+  deleteComment(where: CommentWhereUniqueInput!): Comment
+  deleteFriendRequest(where: FriendRequestWhereUniqueInput!): FriendRequest
   deleteUser(where: UserWhereUniqueInput!): User
   deleteRec(where: RecWhereUniqueInput!): Rec
   upsertRequest(where: RequestWhereUniqueInput!, create: RequestCreateInput!, update: RequestUpdateInput!): Request!
+  upsertComment(where: CommentWhereUniqueInput!, create: CommentCreateInput!, update: CommentUpdateInput!): Comment!
+  upsertFriendRequest(where: FriendRequestWhereUniqueInput!, create: FriendRequestCreateInput!, update: FriendRequestUpdateInput!): FriendRequest!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertRec(where: RecWhereUniqueInput!, create: RecCreateInput!, update: RecUpdateInput!): Rec!
   updateManyRequests(data: RequestUpdateManyMutationInput!, where: RequestWhereInput): BatchPayload!
+  updateManyComments(data: CommentUpdateManyMutationInput!, where: CommentWhereInput): BatchPayload!
+  updateManyFriendRequests(data: FriendRequestUpdateManyMutationInput!, where: FriendRequestWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyRecs(data: RecUpdateManyMutationInput!, where: RecWhereInput): BatchPayload!
   deleteManyRequests(where: RequestWhereInput): BatchPayload!
+  deleteManyComments(where: CommentWhereInput): BatchPayload!
+  deleteManyFriendRequests(where: FriendRequestWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyRecs(where: RecWhereInput): BatchPayload!
 }
@@ -76,12 +690,18 @@ type PageInfo {
 
 type Query {
   requests(where: RequestWhereInput, orderBy: RequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Request]!
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
+  friendRequests(where: FriendRequestWhereInput, orderBy: FriendRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FriendRequest]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   recs(where: RecWhereInput, orderBy: RecOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rec]!
   request(where: RequestWhereUniqueInput!): Request
+  comment(where: CommentWhereUniqueInput!): Comment
+  friendRequest(where: FriendRequestWhereUniqueInput!): FriendRequest
   user(where: UserWhereUniqueInput!): User
   rec(where: RecWhereUniqueInput!): Rec
   requestsConnection(where: RequestWhereInput, orderBy: RequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RequestConnection!
+  commentsConnection(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CommentConnection!
+  friendRequestsConnection(where: FriendRequestWhereInput, orderBy: FriendRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FriendRequestConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   recsConnection(where: RecWhereInput, orderBy: RecOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RecConnection!
 
@@ -96,8 +716,7 @@ type Rec implements Node {
   id: ID!
   title: String!
   description: String!
-  comment: String
-  response: String
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   type: RecType!
   priority: Boolean!
   rating: Int!
@@ -123,14 +742,13 @@ type RecConnection {
 input RecCreateInput {
   title: String!
   description: String!
-  comment: String
-  response: String
   type: RecType!
   priority: Boolean!
   rating: Int!
   image: String!
   bounty: Boolean
   status: StatusType
+  comments: CommentCreateManyWithoutRecInput
   fromUser: UserCreateOneWithoutSentRecsInput!
   toUser: UserCreateOneWithoutRecievedRecsInput!
 }
@@ -150,31 +768,47 @@ input RecCreateManyWithoutToUserInput {
   connect: [RecWhereUniqueInput!]
 }
 
-input RecCreateWithoutFromUserInput {
+input RecCreateOneWithoutCommentsInput {
+  create: RecCreateWithoutCommentsInput
+  connect: RecWhereUniqueInput
+}
+
+input RecCreateWithoutCommentsInput {
   title: String!
   description: String!
-  comment: String
-  response: String
   type: RecType!
   priority: Boolean!
   rating: Int!
   image: String!
   bounty: Boolean
   status: StatusType
+  fromUser: UserCreateOneWithoutSentRecsInput!
+  toUser: UserCreateOneWithoutRecievedRecsInput!
+}
+
+input RecCreateWithoutFromUserInput {
+  title: String!
+  description: String!
+  type: RecType!
+  priority: Boolean!
+  rating: Int!
+  image: String!
+  bounty: Boolean
+  status: StatusType
+  comments: CommentCreateManyWithoutRecInput
   toUser: UserCreateOneWithoutRecievedRecsInput!
 }
 
 input RecCreateWithoutToUserInput {
   title: String!
   description: String!
-  comment: String
-  response: String
   type: RecType!
   priority: Boolean!
   rating: Int!
   image: String!
   bounty: Boolean
   status: StatusType
+  comments: CommentCreateManyWithoutRecInput
   fromUser: UserCreateOneWithoutSentRecsInput!
 }
 
@@ -194,10 +828,6 @@ enum RecOrderByInput {
   title_DESC
   description_ASC
   description_DESC
-  comment_ASC
-  comment_DESC
-  response_ASC
-  response_DESC
   type_ASC
   type_DESC
   priority_ASC
@@ -220,8 +850,6 @@ type RecPreviousValues {
   id: ID!
   title: String!
   description: String!
-  comment: String
-  response: String
   type: RecType!
   priority: Boolean!
   rating: Int!
@@ -282,14 +910,13 @@ enum RecType {
 input RecUpdateDataInput {
   title: String
   description: String
-  comment: String
-  response: String
   type: RecType
   priority: Boolean
   rating: Int
   image: String
   bounty: Boolean
   status: StatusType
+  comments: CommentUpdateManyWithoutRecInput
   fromUser: UserUpdateOneRequiredWithoutSentRecsInput
   toUser: UserUpdateOneRequiredWithoutRecievedRecsInput
 }
@@ -297,14 +924,13 @@ input RecUpdateDataInput {
 input RecUpdateInput {
   title: String
   description: String
-  comment: String
-  response: String
   type: RecType
   priority: Boolean
   rating: Int
   image: String
   bounty: Boolean
   status: StatusType
+  comments: CommentUpdateManyWithoutRecInput
   fromUser: UserUpdateOneRequiredWithoutSentRecsInput
   toUser: UserUpdateOneRequiredWithoutRecievedRecsInput
 }
@@ -321,8 +947,6 @@ input RecUpdateManyInput {
 input RecUpdateManyMutationInput {
   title: String
   description: String
-  comment: String
-  response: String
   type: RecType
   priority: Boolean
   rating: Int
@@ -349,31 +973,49 @@ input RecUpdateManyWithoutToUserInput {
   upsert: [RecUpsertWithWhereUniqueWithoutToUserInput!]
 }
 
-input RecUpdateWithoutFromUserDataInput {
+input RecUpdateOneRequiredWithoutCommentsInput {
+  create: RecCreateWithoutCommentsInput
+  connect: RecWhereUniqueInput
+  update: RecUpdateWithoutCommentsDataInput
+  upsert: RecUpsertWithoutCommentsInput
+}
+
+input RecUpdateWithoutCommentsDataInput {
   title: String
   description: String
-  comment: String
-  response: String
   type: RecType
   priority: Boolean
   rating: Int
   image: String
   bounty: Boolean
   status: StatusType
+  fromUser: UserUpdateOneRequiredWithoutSentRecsInput
+  toUser: UserUpdateOneRequiredWithoutRecievedRecsInput
+}
+
+input RecUpdateWithoutFromUserDataInput {
+  title: String
+  description: String
+  type: RecType
+  priority: Boolean
+  rating: Int
+  image: String
+  bounty: Boolean
+  status: StatusType
+  comments: CommentUpdateManyWithoutRecInput
   toUser: UserUpdateOneRequiredWithoutRecievedRecsInput
 }
 
 input RecUpdateWithoutToUserDataInput {
   title: String
   description: String
-  comment: String
-  response: String
   type: RecType
   priority: Boolean
   rating: Int
   image: String
   bounty: Boolean
   status: StatusType
+  comments: CommentUpdateManyWithoutRecInput
   fromUser: UserUpdateOneRequiredWithoutSentRecsInput
 }
 
@@ -390,6 +1032,11 @@ input RecUpdateWithWhereUniqueWithoutFromUserInput {
 input RecUpdateWithWhereUniqueWithoutToUserInput {
   where: RecWhereUniqueInput!
   data: RecUpdateWithoutToUserDataInput!
+}
+
+input RecUpsertWithoutCommentsInput {
+  update: RecUpdateWithoutCommentsDataInput!
+  create: RecCreateWithoutCommentsInput!
 }
 
 input RecUpsertWithWhereUniqueNestedInput {
@@ -539,86 +1186,6 @@ input RecWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
-  comment: String
-
-  """All values that are not equal to given value."""
-  comment_not: String
-
-  """All values that are contained in given list."""
-  comment_in: [String!]
-
-  """All values that are not contained in given list."""
-  comment_not_in: [String!]
-
-  """All values less than the given value."""
-  comment_lt: String
-
-  """All values less than or equal the given value."""
-  comment_lte: String
-
-  """All values greater than the given value."""
-  comment_gt: String
-
-  """All values greater than or equal the given value."""
-  comment_gte: String
-
-  """All values containing the given string."""
-  comment_contains: String
-
-  """All values not containing the given string."""
-  comment_not_contains: String
-
-  """All values starting with the given string."""
-  comment_starts_with: String
-
-  """All values not starting with the given string."""
-  comment_not_starts_with: String
-
-  """All values ending with the given string."""
-  comment_ends_with: String
-
-  """All values not ending with the given string."""
-  comment_not_ends_with: String
-  response: String
-
-  """All values that are not equal to given value."""
-  response_not: String
-
-  """All values that are contained in given list."""
-  response_in: [String!]
-
-  """All values that are not contained in given list."""
-  response_not_in: [String!]
-
-  """All values less than the given value."""
-  response_lt: String
-
-  """All values less than or equal the given value."""
-  response_lte: String
-
-  """All values greater than the given value."""
-  response_gt: String
-
-  """All values greater than or equal the given value."""
-  response_gte: String
-
-  """All values containing the given string."""
-  response_contains: String
-
-  """All values not containing the given string."""
-  response_not_contains: String
-
-  """All values starting with the given string."""
-  response_starts_with: String
-
-  """All values not starting with the given string."""
-  response_not_starts_with: String
-
-  """All values ending with the given string."""
-  response_ends_with: String
-
-  """All values not ending with the given string."""
-  response_not_ends_with: String
   type: RecType
 
   """All values that are not equal to given value."""
@@ -753,12 +1320,22 @@ input RecWhereInput {
 
   """All values that are not contained in given list."""
   status_not_in: [StatusType!]
+  comments_every: CommentWhereInput
+  comments_some: CommentWhereInput
+  comments_none: CommentWhereInput
   fromUser: UserWhereInput
   toUser: UserWhereInput
 }
 
 input RecWhereUniqueInput {
   id: ID
+}
+
+enum ReqStatusType {
+  NEW
+  ACCEPTED
+  REJECTED
+  PENDING
 }
 
 type Request implements Node {
@@ -1099,6 +1676,8 @@ enum StatusType {
 
 type Subscription {
   request(where: RequestSubscriptionWhereInput): RequestSubscriptionPayload
+  comment(where: CommentSubscriptionWhereInput): CommentSubscriptionPayload
+  friendRequest(where: FriendRequestSubscriptionWhereInput): FriendRequestSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   rec(where: RecSubscriptionWhereInput): RecSubscriptionPayload
 }
@@ -1113,6 +1692,9 @@ type User implements Node {
   sentRecs(where: RecWhereInput, orderBy: RecOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rec!]
   recievedRecs(where: RecWhereInput, orderBy: RecOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rec!]
   requests(where: RequestWhereInput, orderBy: RequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Request!]
+  sentFriendRequests(where: FriendRequestWhereInput, orderBy: FriendRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FriendRequest!]
+  receivedFriendRequests(where: FriendRequestWhereInput, orderBy: FriendRequestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FriendRequest!]
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   updatedAt: DateTime!
   createdAt: DateTime!
 }
@@ -1136,11 +1718,24 @@ input UserCreateInput {
   sentRecs: RecCreateManyWithoutFromUserInput
   recievedRecs: RecCreateManyWithoutToUserInput
   requests: RequestCreateManyWithoutRequesterInput
+  sentFriendRequests: FriendRequestCreateManyWithoutFromInput
+  receivedFriendRequests: FriendRequestCreateManyWithoutToInput
+  comments: CommentCreateManyWithoutAuthorInput
 }
 
 input UserCreateManyInput {
   create: [UserCreateInput!]
   connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateOneWithoutCommentsInput {
+  create: UserCreateWithoutCommentsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutReceivedFriendRequestsInput {
+  create: UserCreateWithoutReceivedFriendRequestsInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutRecievedRecsInput {
@@ -1153,9 +1748,40 @@ input UserCreateOneWithoutRequestsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutSentFriendRequestsInput {
+  create: UserCreateWithoutSentFriendRequestsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutSentRecsInput {
   create: UserCreateWithoutSentRecsInput
   connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutCommentsInput {
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  friends: UserCreateManyInput
+  sentRecs: RecCreateManyWithoutFromUserInput
+  recievedRecs: RecCreateManyWithoutToUserInput
+  requests: RequestCreateManyWithoutRequesterInput
+  sentFriendRequests: FriendRequestCreateManyWithoutFromInput
+  receivedFriendRequests: FriendRequestCreateManyWithoutToInput
+}
+
+input UserCreateWithoutReceivedFriendRequestsInput {
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  friends: UserCreateManyInput
+  sentRecs: RecCreateManyWithoutFromUserInput
+  recievedRecs: RecCreateManyWithoutToUserInput
+  requests: RequestCreateManyWithoutRequesterInput
+  sentFriendRequests: FriendRequestCreateManyWithoutFromInput
+  comments: CommentCreateManyWithoutAuthorInput
 }
 
 input UserCreateWithoutRecievedRecsInput {
@@ -1166,6 +1792,9 @@ input UserCreateWithoutRecievedRecsInput {
   friends: UserCreateManyInput
   sentRecs: RecCreateManyWithoutFromUserInput
   requests: RequestCreateManyWithoutRequesterInput
+  sentFriendRequests: FriendRequestCreateManyWithoutFromInput
+  receivedFriendRequests: FriendRequestCreateManyWithoutToInput
+  comments: CommentCreateManyWithoutAuthorInput
 }
 
 input UserCreateWithoutRequestsInput {
@@ -1176,6 +1805,22 @@ input UserCreateWithoutRequestsInput {
   friends: UserCreateManyInput
   sentRecs: RecCreateManyWithoutFromUserInput
   recievedRecs: RecCreateManyWithoutToUserInput
+  sentFriendRequests: FriendRequestCreateManyWithoutFromInput
+  receivedFriendRequests: FriendRequestCreateManyWithoutToInput
+  comments: CommentCreateManyWithoutAuthorInput
+}
+
+input UserCreateWithoutSentFriendRequestsInput {
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  friends: UserCreateManyInput
+  sentRecs: RecCreateManyWithoutFromUserInput
+  recievedRecs: RecCreateManyWithoutToUserInput
+  requests: RequestCreateManyWithoutRequesterInput
+  receivedFriendRequests: FriendRequestCreateManyWithoutToInput
+  comments: CommentCreateManyWithoutAuthorInput
 }
 
 input UserCreateWithoutSentRecsInput {
@@ -1186,6 +1831,9 @@ input UserCreateWithoutSentRecsInput {
   friends: UserCreateManyInput
   recievedRecs: RecCreateManyWithoutToUserInput
   requests: RequestCreateManyWithoutRequesterInput
+  sentFriendRequests: FriendRequestCreateManyWithoutFromInput
+  receivedFriendRequests: FriendRequestCreateManyWithoutToInput
+  comments: CommentCreateManyWithoutAuthorInput
 }
 
 """An edge in a connection."""
@@ -1272,6 +1920,9 @@ input UserUpdateDataInput {
   sentRecs: RecUpdateManyWithoutFromUserInput
   recievedRecs: RecUpdateManyWithoutToUserInput
   requests: RequestUpdateManyWithoutRequesterInput
+  sentFriendRequests: FriendRequestUpdateManyWithoutFromInput
+  receivedFriendRequests: FriendRequestUpdateManyWithoutToInput
+  comments: CommentUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateInput {
@@ -1283,6 +1934,9 @@ input UserUpdateInput {
   sentRecs: RecUpdateManyWithoutFromUserInput
   recievedRecs: RecUpdateManyWithoutToUserInput
   requests: RequestUpdateManyWithoutRequesterInput
+  sentFriendRequests: FriendRequestUpdateManyWithoutFromInput
+  receivedFriendRequests: FriendRequestUpdateManyWithoutToInput
+  comments: CommentUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateManyInput {
@@ -1301,6 +1955,20 @@ input UserUpdateManyMutationInput {
   password: String
 }
 
+input UserUpdateOneRequiredWithoutCommentsInput {
+  create: UserCreateWithoutCommentsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutCommentsDataInput
+  upsert: UserUpsertWithoutCommentsInput
+}
+
+input UserUpdateOneRequiredWithoutReceivedFriendRequestsInput {
+  create: UserCreateWithoutReceivedFriendRequestsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutReceivedFriendRequestsDataInput
+  upsert: UserUpsertWithoutReceivedFriendRequestsInput
+}
+
 input UserUpdateOneRequiredWithoutRecievedRecsInput {
   create: UserCreateWithoutRecievedRecsInput
   connect: UserWhereUniqueInput
@@ -1315,11 +1983,44 @@ input UserUpdateOneRequiredWithoutRequestsInput {
   upsert: UserUpsertWithoutRequestsInput
 }
 
+input UserUpdateOneRequiredWithoutSentFriendRequestsInput {
+  create: UserCreateWithoutSentFriendRequestsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutSentFriendRequestsDataInput
+  upsert: UserUpsertWithoutSentFriendRequestsInput
+}
+
 input UserUpdateOneRequiredWithoutSentRecsInput {
   create: UserCreateWithoutSentRecsInput
   connect: UserWhereUniqueInput
   update: UserUpdateWithoutSentRecsDataInput
   upsert: UserUpsertWithoutSentRecsInput
+}
+
+input UserUpdateWithoutCommentsDataInput {
+  name: String
+  email: String
+  username: String
+  password: String
+  friends: UserUpdateManyInput
+  sentRecs: RecUpdateManyWithoutFromUserInput
+  recievedRecs: RecUpdateManyWithoutToUserInput
+  requests: RequestUpdateManyWithoutRequesterInput
+  sentFriendRequests: FriendRequestUpdateManyWithoutFromInput
+  receivedFriendRequests: FriendRequestUpdateManyWithoutToInput
+}
+
+input UserUpdateWithoutReceivedFriendRequestsDataInput {
+  name: String
+  email: String
+  username: String
+  password: String
+  friends: UserUpdateManyInput
+  sentRecs: RecUpdateManyWithoutFromUserInput
+  recievedRecs: RecUpdateManyWithoutToUserInput
+  requests: RequestUpdateManyWithoutRequesterInput
+  sentFriendRequests: FriendRequestUpdateManyWithoutFromInput
+  comments: CommentUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateWithoutRecievedRecsDataInput {
@@ -1330,6 +2031,9 @@ input UserUpdateWithoutRecievedRecsDataInput {
   friends: UserUpdateManyInput
   sentRecs: RecUpdateManyWithoutFromUserInput
   requests: RequestUpdateManyWithoutRequesterInput
+  sentFriendRequests: FriendRequestUpdateManyWithoutFromInput
+  receivedFriendRequests: FriendRequestUpdateManyWithoutToInput
+  comments: CommentUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateWithoutRequestsDataInput {
@@ -1340,6 +2044,22 @@ input UserUpdateWithoutRequestsDataInput {
   friends: UserUpdateManyInput
   sentRecs: RecUpdateManyWithoutFromUserInput
   recievedRecs: RecUpdateManyWithoutToUserInput
+  sentFriendRequests: FriendRequestUpdateManyWithoutFromInput
+  receivedFriendRequests: FriendRequestUpdateManyWithoutToInput
+  comments: CommentUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateWithoutSentFriendRequestsDataInput {
+  name: String
+  email: String
+  username: String
+  password: String
+  friends: UserUpdateManyInput
+  sentRecs: RecUpdateManyWithoutFromUserInput
+  recievedRecs: RecUpdateManyWithoutToUserInput
+  requests: RequestUpdateManyWithoutRequesterInput
+  receivedFriendRequests: FriendRequestUpdateManyWithoutToInput
+  comments: CommentUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateWithoutSentRecsDataInput {
@@ -1350,11 +2070,24 @@ input UserUpdateWithoutSentRecsDataInput {
   friends: UserUpdateManyInput
   recievedRecs: RecUpdateManyWithoutToUserInput
   requests: RequestUpdateManyWithoutRequesterInput
+  sentFriendRequests: FriendRequestUpdateManyWithoutFromInput
+  receivedFriendRequests: FriendRequestUpdateManyWithoutToInput
+  comments: CommentUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput!
   data: UserUpdateDataInput!
+}
+
+input UserUpsertWithoutCommentsInput {
+  update: UserUpdateWithoutCommentsDataInput!
+  create: UserCreateWithoutCommentsInput!
+}
+
+input UserUpsertWithoutReceivedFriendRequestsInput {
+  update: UserUpdateWithoutReceivedFriendRequestsDataInput!
+  create: UserCreateWithoutReceivedFriendRequestsInput!
 }
 
 input UserUpsertWithoutRecievedRecsInput {
@@ -1365,6 +2098,11 @@ input UserUpsertWithoutRecievedRecsInput {
 input UserUpsertWithoutRequestsInput {
   update: UserUpdateWithoutRequestsDataInput!
   create: UserCreateWithoutRequestsInput!
+}
+
+input UserUpsertWithoutSentFriendRequestsInput {
+  update: UserUpdateWithoutSentFriendRequestsDataInput!
+  create: UserCreateWithoutSentFriendRequestsInput!
 }
 
 input UserUpsertWithoutSentRecsInput {
@@ -1643,6 +2381,15 @@ input UserWhereInput {
   requests_every: RequestWhereInput
   requests_some: RequestWhereInput
   requests_none: RequestWhereInput
+  sentFriendRequests_every: FriendRequestWhereInput
+  sentFriendRequests_some: FriendRequestWhereInput
+  sentFriendRequests_none: FriendRequestWhereInput
+  receivedFriendRequests_every: FriendRequestWhereInput
+  receivedFriendRequests_some: FriendRequestWhereInput
+  receivedFriendRequests_none: FriendRequestWhereInput
+  comments_every: CommentWhereInput
+  comments_some: CommentWhereInput
+  comments_none: CommentWhereInput
 }
 
 input UserWhereUniqueInput {

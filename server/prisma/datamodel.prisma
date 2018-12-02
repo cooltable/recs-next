@@ -8,16 +8,19 @@ type User {
   sentRecs: [Rec!]! @relation(name: "SentRecommendations", onDelete: CASCADE)
   recievedRecs: [Rec!]! @relation(name: "ReceivedRecommendations", onDelete: CASCADE)
   requests: [Request!]! @relation(name: "UserRequests", onDelete: CASCADE)
+  sentFriendRequests: [FriendRequest!]! @relation(name: "SentRequests", onDelete: CASCADE)
+  receivedFriendRequests: [FriendRequest!]! @relation(name: "ReceivedRequests", onDelete: CASCADE)
+  comments: [Comment!]! @relation(name: "CommentToUser", onDelete: CASCADE)
   updatedAt: DateTime!
   createdAt: DateTime!
+
 }
 
 type Rec {
   id: ID! @unique
   title: String!
   description: String!
-  comment: String
-  response: String
+  comments: [Comment!]! @relation(name: "CommentToRec", onDelete: CASCADE)
   type: RecType!
   priority: Boolean!
   rating: Int!
@@ -41,6 +44,24 @@ type Request {
   requester: User! @relation(name: "UserRequests", onDelete: SET_NULL)
 }
 
+type Comment {
+  id: ID! @unique
+  text: String!
+  author: User! @relation(name: "CommentToUser", onDelete: SET_NULL)
+  rec: Rec! @relation(name: "CommentToRec", onDelete: SET_NULL)
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+type FriendRequest {
+  id: ID! @unique
+  to: User! @relation(name: "ReceivedRequests", onDelete: SET_NULL)
+  from: User! @relation(name: "SentRequests", onDelete: SET_NULL)
+  status: ReqStatusType! @default(value: NEW)
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
 enum RecType {
   Television_show
   Movie
@@ -54,5 +75,12 @@ enum StatusType {
   SEEN 
   DISCARDED
   BOOKMARKED
+}
+
+enum ReqStatusType {
+  NEW
+  ACCEPTED
+  REJECTED
+  PENDING
 }
 
