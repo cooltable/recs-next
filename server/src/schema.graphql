@@ -72,7 +72,7 @@ input CreateCommentInput {
 }
 
 input CreateFriendRequestInput {
-  to: String!
+  to: ID
 }
 
 type User {

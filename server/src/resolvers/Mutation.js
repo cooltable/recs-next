@@ -78,41 +78,48 @@ const Mutation = {
 			to: { id: friend.id },
 			from: { id: userId },
 		});
+		console.log(friend.id, friendExists, requestExists);
 
 		if (friendExists || requestExists) throw new Error('Unable to add friend');
 
-		return prisma.mutation.createFriendRequest({
-			data: {
-				to: {
-					connect: {
-						id: friend.id,
+		return prisma.mutation.createFriendRequest(
+			{
+				data: {
+					to: {
+						connect: {
+							id: friend.id,
+						},
 					},
-				},
-				from: {
-					connect: {
-						id: userId,
+					from: {
+						connect: {
+							id: userId,
+						},
 					},
 				},
 			},
-		});
+			info,
+		);
 	},
 
 	async respondFriendRequest(parent, args, { prisma, request }, info) {
 		const userId = getUserId(request);
 		console.log(userId);
-		const friendRequest = await prisma.query.friendRequests({
-			where: {
-				id: args.id,
-				to: {
-					id: userId,
+		const [ friendRequest ] = await prisma.query.friendRequests(
+			{
+				where: {
+					id: args.id,
+					to: {
+						id: userId,
+					},
+					status_in: [ 'NEW', 'PENDING' ],
 				},
-				status_in: [ 'NEW', 'PENDING' ],
 			},
-		});
+			`{id to { id username } from { id username }}`,
+		);
 
-		let newFriend = friendRequest[0];
+		let newFriend = friendRequest.from;
 		if (!friendRequest) throw new Error('something went wrong');
-
+		console.log(newFriend.id, userId);
 		const res = await prisma.mutation.updateFriendRequest({
 			where: {
 				id: args.id,
@@ -130,6 +137,21 @@ const Mutation = {
 						connect: [
 							{
 								id: newFriend.id,
+							},
+						],
+					},
+				},
+			});
+
+			const secondFriend = await prisma.mutation.updateUser({
+				where: {
+					id: newFriend.id,
+				},
+				data: {
+					friends: {
+						connect: [
+							{
+								id: userId,
 							},
 						],
 					},

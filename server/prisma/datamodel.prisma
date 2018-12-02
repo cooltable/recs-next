@@ -4,7 +4,7 @@ type User {
   email: String! @unique
   username: String! @unique
   password: String!
-  friends: [User!]! @relation(name: "Friends", onDelete: SET_NULL)
+  friends: [User!]! 
   sentRecs: [Rec!]! @relation(name: "SentRecommendations", onDelete: CASCADE)
   recievedRecs: [Rec!]! @relation(name: "ReceivedRecommendations", onDelete: CASCADE)
   requests: [Request!]! @relation(name: "UserRequests", onDelete: CASCADE)
