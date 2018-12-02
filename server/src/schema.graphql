@@ -9,7 +9,9 @@ type Mutation {
   login(data: LoginUserInput): AuthPayload!
   deleteUser(id: ID!): User!
   updateUser(id: ID!, data: UpdateUserInput): User!
+  udpateRec(id: ID!, data: UpdateRecInput): Rec!
   createRec(data: CreateRecInput!): Rec!
+  createComment(data: CreateCommentInput!): Comment!
 }
 
 type AuthPayload {
@@ -39,13 +41,27 @@ input UpdateUserInput {
 input CreateRecInput {
   title: String!
   description: String!
-  comments: String
-  response: String
   priority: Boolean!
   type: RecType!
   rating: Int!
   image: String!
   toUser: ID!
+  comment: String
+ 
+}
+
+input UpdateRecInput {
+  title: String
+  description: String
+  priority: Boolean
+  type: RecType
+  rating: Int
+  image: String 
+  comments: [ID]
+}
+
+input CreateCommentInput {
+  text: String!
 }
 
 type User {

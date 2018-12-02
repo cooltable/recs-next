@@ -59,7 +59,7 @@ const Mutation = {
 		);
 	},
 
-	createRec(parent, { data }, { prisma, request }, info) {
+	async createRec(parent, { data }, { prisma, request }, info) {
 		const userId = getUserId(request);
 
 		return prisma.mutation.createRec(
@@ -67,11 +67,22 @@ const Mutation = {
 				data: {
 					title: data.title,
 					description: data.description,
-					comment: data.comment,
 					priority: data.priority,
 					rating: data.rating,
 					image: data.image,
 					type: data.type,
+					comments: {
+						create: [
+							{
+								text: data.comment,
+								author: {
+									connect: {
+										id: userId,
+									},
+								},
+							},
+						],
+					},
 					fromUser: {
 						connect: {
 							id: userId,
