@@ -1,6 +1,8 @@
+
 type Query {
     users(query: String):[User!]!
     myRecs(query: String): [Rec!]!
+    myFriendRequests: [FriendRequest!]!
     me: User!
   }
 
@@ -13,6 +15,11 @@ type Mutation {
   createRec(data: CreateRecInput!): Rec!
   createComment(data: CreateCommentInput!): Comment!
   createFriendRequest(data: CreateFriendRequestInput): FriendRequest!
+  respondFriendRequest(id: ID!, status: ReqStatusType! ): ResponseMessage
+}
+
+type ResponseMessage {
+  message: String
 }
 
 type AuthPayload {
@@ -37,6 +44,7 @@ input UpdateUserInput {
   email: String
   username: String
   password: String
+  friends: [ID]
 }
 
 input CreateRecInput {
@@ -48,7 +56,6 @@ input CreateRecInput {
   image: String!
   toUser: ID!
   comment: String
- 
 }
 
 input UpdateRecInput {

@@ -97,6 +97,49 @@ const Mutation = {
 		});
 	},
 
+	async respondFriendRequest(parent, args, { prisma, request }, info) {
+		const userId = getUserId(request);
+		console.log(userId);
+		const friendRequest = await prisma.query.friendRequests({
+			where: {
+				id: args.id,
+				to: {
+					id: userId,
+				},
+				status_in: [ 'NEW', 'PENDING' ],
+			},
+		});
+
+		let newFriend = friendRequest[0];
+		if (!friendRequest) throw new Error('something went wrong');
+
+		const res = await prisma.mutation.updateFriendRequest({
+			where: {
+				id: args.id,
+			},
+			data: { status: args.status },
+		});
+
+		if (args.status === 'ACCEPTED') {
+			const friend = prisma.mutation.updateUser({
+				where: {
+					id: userId,
+				},
+				data: {
+					friends: {
+						connect: [
+							{
+								id: newFriend,
+							},
+						],
+					},
+				},
+			});
+
+			return { message: 'You have a new friend' };
+		} else return { message: 'The friend request has been deleted' };
+	},
+
 	async createRec(parent, { data }, { prisma, request }, info) {
 		const userId = getUserId(request);
 
