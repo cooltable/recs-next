@@ -3,6 +3,7 @@ import { Mutation } from 'react-apollo';
 import Router from 'next/router';
 import gql from 'graphql-tag';
 import { CURRENT_USER_QUERY } from '../queries/User';
+import { ALL_RECS_QUERY } from '../queries/Recs';
 
 const LOGIN_MUTATION = gql`
 	mutation LOGIN_MUTATION($email: String!, $password: String!) {
@@ -28,11 +29,7 @@ class Login extends React.Component {
 			<Mutation
 				mutation={LOGIN_MUTATION}
 				variables={this.state}
-				refetchQueries={[ { query: CURRENT_USER_QUERY } ]}
-				onCompleted={user => {
-					console.log(user);
-					Router.push('/recs');
-				}}
+				refetchQueries={[ { query: CURRENT_USER_QUERY }, { query: ALL_RECS_QUERY } ]}
 			>
 				{(login, { error, loading }) => (
 					<AuthForm
@@ -40,6 +37,7 @@ class Login extends React.Component {
 						handleSubmit={async e => {
 							e.preventDefault();
 							await login();
+							Router.push('/recs');
 						}}
 					>
 						<AuthInput

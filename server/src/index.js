@@ -15,12 +15,11 @@ server.express.use((req, res, next) => {
 		const { userId } = jwt.verify(token, 'thisisasecret');
 		req.userId = userId;
 	}
-	console.log('first middleware ' + token);
+
 	next();
 });
 
 server.express.use(async (req, res, next) => {
-	console.log('second middleware ' + req.userId);
 	if (!req.userId) return next();
 	const user = await prisma.query.user(
 		{

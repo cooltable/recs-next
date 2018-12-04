@@ -15,6 +15,7 @@ const CURRENT_USER_QUERY = gql`
 				id
 			}
 			friends {
+				id
 				username
 			}
 			sentRecs {
@@ -25,6 +26,7 @@ const CURRENT_USER_QUERY = gql`
 					id
 					text
 					author {
+						id
 						username
 					}
 				}

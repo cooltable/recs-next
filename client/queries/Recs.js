@@ -37,3 +37,4 @@ const Recs = props => (
 );
 
 export default Recs;
+export { ALL_RECS_QUERY };

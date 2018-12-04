@@ -56,7 +56,7 @@ const Query = {
 	myRecs(parent, args, { prisma, request }, info) {
 		const { userId } = request;
 		if (!userId) {
-			throw new Error('You must be logged in!');
+			return null;
 		}
 		const opArgs = {
 			first: args.first,

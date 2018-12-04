@@ -45,45 +45,51 @@ const StyledLink = styled.a`
 const Header = () => (
 	<ThemeProvider theme={theme}>
 		<User>
-			{({ data: { me } }) => (
-				<StyledNav>
-					<NavBrand>
-						<Link href='/'>
-							<Brand>Recs</Brand>
-						</Link>
-					</NavBrand>
+			{({ client, data: { me } }) => {
+				console.log(client, me);
+				return (
+					<StyledNav>
+						<NavBrand>
+							<Link href='/'>
+								<Brand>Recs</Brand>
+							</Link>
+						</NavBrand>
 
-					{me ? (
-						<NavLinks>
-							<Link href='/recs'>
-								<StyledLink>Recs</StyledLink>
-							</Link>
-							<Signout>
-								{signout => (
-									<StyledLink
-										as='button'
-										onClick={() => {
-											signout();
-											Router.push('/login');
-										}}
-									>
-										Log out {me.username}
-									</StyledLink>
-								)}
-							</Signout>
-						</NavLinks>
-					) : (
-						<NavLinks>
-							<Link href='/register'>
-								<StyledLink>Sign Up</StyledLink>
-							</Link>
-							<Link href='/login'>
-								<StyledLink>Sign In</StyledLink>
-							</Link>
-						</NavLinks>
-					)}
-				</StyledNav>
-			)}
+						{me ? (
+							<NavLinks>
+								<Link href='/recs'>
+									<StyledLink>Recs</StyledLink>
+								</Link>
+								<Signout>
+									{signout => (
+										<StyledLink
+											as='button'
+											onClick={async () => {
+												await signout();
+
+												client
+													.resetStore()
+													.then(() => Router.push('/login'));
+											}}
+										>
+											Log out {me.username}
+										</StyledLink>
+									)}
+								</Signout>
+							</NavLinks>
+						) : (
+							<NavLinks>
+								<Link href='/register'>
+									<StyledLink>Sign Up</StyledLink>
+								</Link>
+								<Link href='/login'>
+									<StyledLink>Sign In</StyledLink>
+								</Link>
+							</NavLinks>
+						)}
+					</StyledNav>
+				);
+			}}
 		</User>
 	</ThemeProvider>
 );

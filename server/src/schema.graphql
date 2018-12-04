@@ -2,7 +2,7 @@
 
 type Query {
     users(query: String):[User!]!
-    myRecs(query: String, orderBy: RecOrderByInput): [Rec!]!
+    myRecs(query: String, orderBy: RecOrderByInput): [Rec!]
     myFriendRequests: [FriendRequest!]!
     me: User
   }
