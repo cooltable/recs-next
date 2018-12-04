@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import Router from 'next/router';
 import styled, { ThemeProvider } from 'styled-components';
-import User from './User';
+import User from '../queries/User';
+import Signout from '../mutations/Signout';
 import { theme } from './Page';
 
 const StyledNav = styled.div`
@@ -26,6 +28,7 @@ const Brand = styled.h2`
 const NavLinks = styled.div`margin-right: 30px;`;
 
 const StyledLink = styled.a`
+	border: none;
 	text-decoration: none;
 	color: ${props => props.theme.colorWhite};
 	color: inherit;
@@ -42,15 +45,34 @@ const StyledLink = styled.a`
 const Header = () => (
 	<ThemeProvider theme={theme}>
 		<User>
-			{({ data: { me } }) => {
-				console.log(me);
-				return (
-					<StyledNav>
-						<NavBrand>
-							<Link href='/'>
-								<Brand>Recs</Brand>
+			{({ data: { me } }) => (
+				<StyledNav>
+					<NavBrand>
+						<Link href='/'>
+							<Brand>Recs</Brand>
+						</Link>
+					</NavBrand>
+
+					{me ? (
+						<NavLinks>
+							<Link href='/recs'>
+								<StyledLink>Recs</StyledLink>
 							</Link>
-						</NavBrand>
+							<Signout>
+								{signout => (
+									<StyledLink
+										as='button'
+										onClick={() => {
+											signout();
+											Router.push('/login');
+										}}
+									>
+										Log out {me.username}
+									</StyledLink>
+								)}
+							</Signout>
+						</NavLinks>
+					) : (
 						<NavLinks>
 							<Link href='/register'>
 								<StyledLink>Sign Up</StyledLink>
@@ -58,13 +80,10 @@ const Header = () => (
 							<Link href='/login'>
 								<StyledLink>Sign In</StyledLink>
 							</Link>
-							<Link href='/recs'>
-								<StyledLink>Recs</StyledLink>
-							</Link>
 						</NavLinks>
-					</StyledNav>
-				);
-			}}
+					)}
+				</StyledNav>
+			)}
 		</User>
 	</ThemeProvider>
 );

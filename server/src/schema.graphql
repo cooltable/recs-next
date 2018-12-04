@@ -1,9 +1,10 @@
+# import * from './generated/prisma.graphql'
 
 type Query {
     users(query: String):[User!]!
-    myRecs(query: String): [Rec!]!
+    myRecs(query: String, orderBy: RecOrderByInput): [Rec!]!
     myFriendRequests: [FriendRequest!]!
-    me: User!
+    me: User
   }
 
 type Mutation {

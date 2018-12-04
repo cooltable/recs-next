@@ -52,7 +52,7 @@ const Close = styled.button`
 const RecModal = ({ rec, handleClose }) => (
 	<ModalWrapper>
 		<ModalContent>
-			<img src={rec.img} />
+			<img src={rec.image} />
 			<Content>
 				<h1>{rec.title}</h1>
 				<p>{rec.description}</p>

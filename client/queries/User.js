@@ -7,6 +7,36 @@ const CURRENT_USER_QUERY = gql`
 			id
 			email
 			username
+			receivedFriendRequests {
+				from {
+					username
+				}
+				status
+				id
+			}
+			friends {
+				username
+			}
+			sentRecs {
+				id
+				title
+				description
+				comments {
+					id
+					text
+					author {
+						username
+					}
+				}
+			}
+			recievedRecs {
+				id
+				title
+				description
+				comments {
+					id
+				}
+			}
 		}
 	}
 `;
@@ -14,7 +44,6 @@ const CURRENT_USER_QUERY = gql`
 const User = props => (
 	<Query {...props} query={CURRENT_USER_QUERY}>
 		{payload => {
-			console.log(payload.data);
 			return props.children(payload);
 		}}
 	</Query>

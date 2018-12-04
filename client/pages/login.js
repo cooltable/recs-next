@@ -1,7 +1,8 @@
 import { AuthForm, AuthInput, AuthButton } from '../components/AuthForm';
 import { Mutation } from 'react-apollo';
+import Router from 'next/router';
 import gql from 'graphql-tag';
-import { CURRENT_USER_QUERY } from '../components/User';
+import { CURRENT_USER_QUERY } from '../queries/User';
 
 const LOGIN_MUTATION = gql`
 	mutation LOGIN_MUTATION($email: String!, $password: String!) {
@@ -28,6 +29,10 @@ class Login extends React.Component {
 				mutation={LOGIN_MUTATION}
 				variables={this.state}
 				refetchQueries={[ { query: CURRENT_USER_QUERY } ]}
+				onCompleted={user => {
+					console.log(user);
+					Router.push('/recs');
+				}}
 			>
 				{(login, { error, loading }) => (
 					<AuthForm
