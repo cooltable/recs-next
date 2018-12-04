@@ -4,7 +4,7 @@ import getUserId from '../utils/getUserId';
 import hashPassword from '../utils/hashPassword';
 
 const Mutation = {
-	async createUser(parent, args, { prisma }, info) {
+	async createUser(parent, args, { prisma, response }, info) {
 		const password = await hashPassword(args.data.password);
 
 		const user = await prisma.mutation.createUser({
@@ -14,12 +14,16 @@ const Mutation = {
 			},
 		});
 
-		return {
-			user,
-			token: generateToken(user.id),
-		};
+		const token = generateToken(user.id);
+
+		response.cookie('token', token, {
+			httpOnly: true,
+			maxAge: 1000 * 60 * 60 * 24 * 365,
+		});
+
+		return user;
 	},
-	async login(parent, args, { prisma }, info) {
+	async login(parent, args, { prisma, response }, info) {
 		const user = await prisma.query.user({
 			where: {
 				email: args.data.email,
@@ -36,13 +40,21 @@ const Mutation = {
 			throw new Error('Unable to login');
 		}
 
-		return {
-			user,
-			token: generateToken(user.id),
-		};
+		const token = generateToken(user.id);
+
+		response.cookie('token', token, {
+			httpOnly: true,
+			maxAge: 1000 * 60 * 60 * 24 * 365,
+		});
+
+		return user;
+	},
+	signout(parent, args, { response }, info) {
+		response.clearCookie('token');
+		return { message: 'Goodbye!' };
 	},
 	async updateUser(parent, args, { prisma, request }, info) {
-		const userId = getUserId(request);
+		const { userId } = request;
 
 		if (typeof args.data.password === 'string') {
 			args.data.password = await hashPassword(args.data.password);
@@ -60,7 +72,10 @@ const Mutation = {
 	},
 
 	async createFriendRequest(parent, args, { prisma, request }, info) {
-		const userId = getUserId(request);
+		const { userId } = request;
+		if (!userId) {
+			throw new Error('You must be logged in!');
+		}
 		const friend = await prisma.query.user({
 			where: {
 				username: args.data.to,
@@ -102,7 +117,10 @@ const Mutation = {
 	},
 
 	async respondFriendRequest(parent, args, { prisma, request }, info) {
-		const userId = getUserId(request);
+		const { userId } = request;
+		if (!userId) {
+			throw new Error('You must be logged in!');
+		}
 		console.log(userId);
 		const [ friendRequest ] = await prisma.query.friendRequests(
 			{
@@ -163,7 +181,10 @@ const Mutation = {
 	},
 
 	async createRec(parent, { data }, { prisma, request }, info) {
-		const userId = getUserId(request);
+		const { userId } = request;
+		if (!userId) {
+			throw new Error('You must be logged in!');
+		}
 
 		return prisma.mutation.createRec(
 			{

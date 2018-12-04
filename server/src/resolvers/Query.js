@@ -2,12 +2,14 @@ import getUserId from '../utils/getUserId';
 
 const Query = {
 	me(parent, args, { prisma, request }, info) {
-		const userId = getUserId(request);
+		if (!request.userId) {
+			return null;
+		}
 
 		return prisma.query.user(
 			{
 				where: {
-					id: userId,
+					id: request.userId,
 				},
 			},
 			info,
@@ -33,7 +35,10 @@ const Query = {
 		return prisma.query.users(opArgs, info);
 	},
 	myFriendRequests(parent, args, { prisma, request }, info) {
-		const userId = getUserId(request);
+		const { userId } = request;
+		if (!userId) {
+			throw new Error('You must be logged in!');
+		}
 		const opArgs = {
 			first: args.first,
 			skip: args.skip,
@@ -49,7 +54,10 @@ const Query = {
 		return prisma.query.friendRequests(opArgs, info);
 	},
 	myRecs(parent, args, { prisma, request }, info) {
-		const userId = getUserId(request);
+		const { userId } = request;
+		if (!userId) {
+			throw new Error('You must be logged in!');
+		}
 		const opArgs = {
 			first: args.first,
 			skip: args.skip,

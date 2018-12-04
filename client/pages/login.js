@@ -5,14 +5,11 @@ import { CURRENT_USER_QUERY } from '../components/User';
 
 const LOGIN_MUTATION = gql`
 	mutation LOGIN_MUTATION($email: String!, $password: String!) {
-		login(email: $email, password: $password) {
-			token
-			user {
-				id
-				email
-				name
-				username
-			}
+		login(data: { email: $email, password: $password }) {
+			id
+			email
+			name
+			username
 		}
 	}
 `;
@@ -25,14 +22,14 @@ class Login extends React.Component {
 	};
 
 	render() {
-		let { username, password } = this.state;
+		let { email, password } = this.state;
 		return (
 			<Mutation
 				mutation={LOGIN_MUTATION}
 				variables={this.state}
 				refetchQueries={[ { query: CURRENT_USER_QUERY } ]}
 			>
-				{login => (
+				{(login, { error, loading }) => (
 					<AuthForm
 						title='Log In'
 						handleSubmit={async e => {
@@ -41,10 +38,10 @@ class Login extends React.Component {
 						}}
 					>
 						<AuthInput
-							name='username'
-							type='text'
-							label='Username'
-							value={username}
+							name='email'
+							type='email'
+							label='Email'
+							value={email}
 							handleChange={this.handleChange}
 						/>
 						<AuthInput
