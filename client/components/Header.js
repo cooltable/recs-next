@@ -45,8 +45,8 @@ const StyledLink = styled.a`
 const Header = () => (
 	<ThemeProvider theme={theme}>
 		<User>
-			{({ client, data: { me } }) => {
-				console.log(client, me);
+			{({ client, data }) => {
+				console.log(data);
 				return (
 					<StyledNav>
 						<NavBrand>
@@ -55,8 +55,11 @@ const Header = () => (
 							</Link>
 						</NavBrand>
 
-						{me ? (
+						{data && data.me ? (
 							<NavLinks>
+								<Link href='/friends'>
+									<StyledLink>Friends</StyledLink>
+								</Link>
 								<Link href='/recs'>
 									<StyledLink>Recs</StyledLink>
 								</Link>
@@ -72,7 +75,7 @@ const Header = () => (
 													.then(() => Router.push('/login'));
 											}}
 										>
-											Log out {me.username}
+											Log out {data.me.username}
 										</StyledLink>
 									)}
 								</Signout>

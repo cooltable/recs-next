@@ -5,7 +5,6 @@ import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
 function createClient({ headers }) {
-	console.log(headers);
 	return new ApolloClient({
 		uri: 'http://localhost:4000',
 		request: operation => {

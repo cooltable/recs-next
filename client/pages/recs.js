@@ -6,7 +6,7 @@ const Recs = () => (
 	<RecsQuery>
 		{({ data: { myRecs } }) => {
 			let recs = _.groupBy(myRecs, rec => rec.type);
-			console.log(recs);
+
 			return Object.keys(recs).map(key => (
 				<RecCategory key={key} type={key} recs={recs[key]} />
 			));

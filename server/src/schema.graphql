@@ -1,9 +1,9 @@
 # import * from './generated/prisma.graphql'
 
 type Query {
-    users(query: String):[User!]!
+    allUsers(query: String):[User!]
     myRecs(query: String, orderBy: RecOrderByInput): [Rec!]
-    myFriendRequests: [FriendRequest!]!
+    myFriendRequests: [FriendRequest!]
     me: User
   }
 

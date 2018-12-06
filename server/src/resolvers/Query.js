@@ -15,7 +15,8 @@ const Query = {
 			info,
 		);
 	},
-	users(parent, args, { prisma }, info) {
+	allUsers(parent, args, { prisma }, info) {
+		console.log(args);
 		const opArgs = {
 			first: args.first,
 			skip: args.skip,
@@ -28,6 +29,9 @@ const Query = {
 				OR: [
 					{
 						name_contains: args.query,
+					},
+					{
+						username_contains: args.query,
 					},
 				],
 			};
