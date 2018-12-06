@@ -78,7 +78,7 @@ const Mutation = {
 		}
 		const friend = await prisma.query.user({
 			where: {
-				username: args.data.to,
+				id: args.data.to,
 			},
 		});
 
