@@ -1,10 +1,11 @@
 import FriendSearch from '../components/FriendsSearch';
+import Friends from '../components/Friends';
 
-const Friends = () => (
-	<div>
+const FriendsPage = () => (
+	<div style={{ display: 'flex', justifyContent: 'space-around' }}>
 		<FriendSearch />
-		<div>hi</div>
+		<Friends />
 	</div>
 );
 
-export default Friends;
+export default FriendsPage;

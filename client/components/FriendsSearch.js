@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Downshift, { resetIdCounter } from 'downshift';
 import { ApolloConsumer } from 'react-apollo';
 import { SEARCH_USERS_QUERY } from '../queries/Users';
+import { CURRENT_USER_QUERY } from '../queries/User';
 import debounce from 'lodash.debounce';
 
 class FriendsSearch extends Component {
@@ -11,26 +12,27 @@ class FriendsSearch extends Component {
 	};
 
 	onChange = debounce(async (e, client) => {
-		console.log(e.target);
 		this.setState({ loading: true });
 		const res = await client.query({
 			query: SEARCH_USERS_QUERY,
 			variables: { searchTerm: e.target.value },
 		});
+		let { me } = client.cache.readQuery({ query: CURRENT_USER_QUERY });
 
-		let searchField = res.data.allUsers.length ? res.data.allUsers : [];
+		let searchField = res.data.allUsers.length
+			? res.data.allUsers.filter(user => user.id !== me.id)
+			: [];
 
 		this.setState({
 			items: searchField,
 			loading: false,
 		});
-
-		console.log(res.data);
 	}, 350);
 	render() {
 		resetIdCounter();
 		return (
 			<div>
+				<h3>Add a new friend</h3>
 				<Downshift
 					onChange={selection =>
 						alert(
@@ -52,7 +54,6 @@ class FriendsSearch extends Component {
 							<div>
 								<ApolloConsumer>
 									{client => {
-										console.log(client);
 										return (
 											<input
 												{...getInputProps({
@@ -71,7 +72,10 @@ class FriendsSearch extends Component {
 								<ul>
 									{isOpen ? (
 										this.state.items.map((item, i) => (
-											<li key={item.id}>{item.username}</li>
+											<div key={item.id}>
+												<div>{item.username}</div>
+												<button>Add friend</button>
+											</div>
 										))
 									) : null}
 								</ul>
